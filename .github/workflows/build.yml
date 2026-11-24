@@ -42,8 +42,10 @@ jobs:
           echo "eula=true" > run/eula.txt
           cp .github/smoke/server.properties run/server.properties
           ./gradlew runServer --no-daemon > server.log 2>&1 &
+          gpid=$!
           for i in $(seq 1 120); do
             grep -q "RCON running" server.log && break
+            kill -0 $gpid 2>/dev/null || break
             sleep 5
           done
           set +e

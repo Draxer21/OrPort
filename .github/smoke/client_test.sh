@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Abre el mundo preparado por server_test.py en el cliente y toma capturas de los escorpiones.
 set -u
+if [ ! -f run/world/level.dat ]; then echo "No hay mundo del servidor; se omite"; exit 1; fi
 mkdir -p run/saves shots
 rm -rf run/saves/smoke && cp -r run/world run/saves/smoke
 cp .github/smoke/options.txt run/options.txt

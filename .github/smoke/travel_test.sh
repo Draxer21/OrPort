@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Viajes con las hormigas en una sola sesión de cliente: /tp delante de cada hormiga quieta y clic derecho.
 set -u
+if [ ! -f run/world/level.dat ]; then echo "No hay mundo del servidor; se omite"; exit 1; fi
 export DISPLAY=:99 LIBGL_ALWAYS_SOFTWARE=1
 pgrep Xvfb >/dev/null || (Xvfb :99 -screen 0 1280x720x24 >/dev/null 2>&1 &)
 sleep 2
