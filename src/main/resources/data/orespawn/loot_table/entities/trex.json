@@ -1,0 +1,191 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "orespawn:trextooth"
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:item_frame"
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:beef",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:loot_table",
+          "value": {
+            "pools": [
+              {
+                "rolls": 1,
+                "entries": [
+                  {
+                    "type": "minecraft:item",
+                    "name": "orespawn:uranium_nugget",
+                    "functions": [
+                      {
+                        "function": "minecraft:set_count",
+                        "count": 2
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "rolls": 1,
+                "entries": [
+                  {
+                    "type": "minecraft:item",
+                    "name": "orespawn:titanium_nugget",
+                    "functions": [
+                      {
+                        "function": "minecraft:set_count",
+                        "count": 2
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "minecraft:loot_table",
+          "value": {
+            "pools": [
+              {
+                "rolls": 1,
+                "entries": [
+                  {
+                    "type": "minecraft:item",
+                    "name": "orespawn:uranium_nugget",
+                    "functions": [
+                      {
+                        "function": "minecraft:set_count",
+                        "count": 3
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "rolls": 1,
+                "entries": [
+                  {
+                    "type": "minecraft:item",
+                    "name": "orespawn:titanium_nugget",
+                    "functions": [
+                      {
+                        "function": "minecraft:set_count",
+                        "count": 3
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "minecraft:loot_table",
+          "value": {
+            "pools": [
+              {
+                "rolls": 1,
+                "entries": [
+                  {
+                    "type": "minecraft:item",
+                    "name": "orespawn:uranium_nugget",
+                    "functions": [
+                      {
+                        "function": "minecraft:set_count",
+                        "count": 4
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "rolls": 1,
+                "entries": [
+                  {
+                    "type": "minecraft:item",
+                    "name": "orespawn:titanium_nugget",
+                    "functions": [
+                      {
+                        "function": "minecraft:set_count",
+                        "count": 4
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "minecraft:loot_table",
+          "value": {
+            "pools": [
+              {
+                "rolls": 1,
+                "entries": [
+                  {
+                    "type": "minecraft:item",
+                    "name": "orespawn:uranium_nugget",
+                    "functions": [
+                      {
+                        "function": "minecraft:set_count",
+                        "count": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "rolls": 1,
+                "entries": [
+                  {
+                    "type": "minecraft:item",
+                    "name": "orespawn:titanium_nugget",
+                    "functions": [
+                      {
+                        "function": "minecraft:set_count",
+                        "count": 5
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

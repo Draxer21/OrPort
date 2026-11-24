@@ -1,0 +1,455 @@
+{
+  "entity.alosaurus.living": {
+    "subtitle": "subtitles.orespawn.entity.alosaurus.living",
+    "sounds": [
+      {
+        "name": "orespawn:entity/alosaurus/living",
+        "stream": true
+      }
+    ]
+  },
+  "entity.alosaurus.hurt": {
+    "subtitle": "subtitles.orespawn.entity.alosaurus.hurt",
+    "sounds": [
+      {
+        "name": "orespawn:entity/alosaurus/hurt",
+        "stream": true
+      }
+    ]
+  },
+  "entity.alosaurus.death": {
+    "subtitle": "subtitles.orespawn.entity.alosaurus.death",
+    "sounds": [
+      {
+        "name": "orespawn:entity/alosaurus/death",
+        "stream": true
+      }
+    ]
+  },
+  "entity.trex.ambient": {
+    "subtitle": "subtitles.orespawn.entity.trex.ambient",
+    "sounds": [
+      {
+        "name": "orespawn:entity/trex/ambient",
+        "stream": true
+      }
+    ]
+  },
+  "entity.trex.death": {
+    "subtitle": "subtitles.orespawn.entity.trex.death",
+    "sounds": [
+      {
+        "name": "orespawn:entity/trex/death",
+        "stream": true
+      }
+    ]
+  },
+  "entity.duck.hurt": {
+    "subtitle": "subtitles.orespawn.entity.duck.hurt",
+    "sounds": [
+      {
+        "name": "orespawn:entity/duck/hurt",
+        "stream": true
+      }
+    ]
+  },
+  "entity.cryo.hurt": {
+    "subtitle": "subtitles.orespawn.entity.cryo.hurt",
+    "sounds": [
+      {
+        "name": "orespawn:entity/cryo/hurt",
+        "stream": true
+      }
+    ]
+  },
+  "entity.cryo.death": {
+    "subtitle": "subtitles.orespawn.entity.cryo.death",
+    "sounds": [
+      {
+        "name": "orespawn:entity/cryo/death",
+        "stream": true
+      }
+    ]
+  },
+  "entity.cryo.living": {
+    "subtitle": "subtitles.orespawn.entity.cryo.living",
+    "sounds": [
+      {
+        "name": "orespawn:entity/cryo/living",
+        "stream": true
+      }
+    ]
+  },
+  "entity.birds.birds1": {
+    "subtitle": "subtitles.orespawn.entity.birds.birds1",
+    "sounds": [
+      {
+        "name": "orespawn:entity/birds/birds1",
+        "stream": true
+      }
+    ]
+  },
+  "entity.birds.birds2": {
+    "subtitle": "subtitles.orespawn.entity.birds.birds2",
+    "sounds": [
+      {
+        "name": "orespawn:entity/birds/birds2",
+        "stream": true
+      }
+    ]
+  },
+  "entity.birds.birds3": {
+    "subtitle": "subtitles.orespawn.entity.birds.birds3",
+    "sounds": [
+      {
+        "name": "orespawn:entity/birds/birds3",
+        "stream": true
+      }
+    ]
+  },
+  "entity.birds.birds4": {
+    "subtitle": "subtitles.orespawn.entity.birds.birds4",
+    "sounds": [
+      {
+        "name": "orespawn:entity/birds/birds4",
+        "stream": true
+      }
+    ]
+  },
+  "entity.birds.birds5": {
+    "subtitle": "subtitles.orespawn.entity.birds.birds5",
+    "sounds": [
+      {
+        "name": "orespawn:entity/birds/birds5",
+        "stream": true
+      }
+    ]
+  },
+  "entity.birds.birds6": {
+    "subtitle": "subtitles.orespawn.entity.birds.birds6",
+    "sounds": [
+      {
+        "name": "orespawn:entity/birds/birds6",
+        "stream": true
+      }
+    ]
+  },
+  "entity.birds.birds7": {
+    "subtitle": "subtitles.orespawn.entity.birds.birds7",
+    "sounds": [
+      {
+        "name": "orespawn:entity/birds/birds7",
+        "stream": true
+      }
+    ]
+  },
+  "entity.birds.birds8": {
+    "subtitle": "subtitles.orespawn.entity.birds.birds8",
+    "sounds": [
+      {
+        "name": "orespawn:entity/birds/birds8",
+        "stream": true
+      }
+    ]
+  },
+  "entity.birds.birds9": {
+    "subtitle": "subtitles.orespawn.entity.birds.birds9",
+    "sounds": [
+      {
+        "name": "orespawn:entity/birds/birds9",
+        "stream": true
+      }
+    ]
+  },
+  "entity.birds.birds10": {
+    "subtitle": "subtitles.orespawn.entity.birds.birds10",
+    "sounds": [
+      {
+        "name": "orespawn:entity/birds/birds10",
+        "stream": true
+      }
+    ]
+  },
+  "entity.birds.birds11": {
+    "subtitle": "subtitles.orespawn.entity.birds.birds11",
+    "sounds": [
+      {
+        "name": "orespawn:entity/birds/birds11",
+        "stream": true
+      }
+    ]
+  },
+  "entity.birds.birds12": {
+    "subtitle": "subtitles.orespawn.entity.birds.birds12",
+    "sounds": [
+      {
+        "name": "orespawn:entity/birds/birds12",
+        "stream": true
+      }
+    ]
+  },
+  "entity.birds.birds13": {
+    "subtitle": "subtitles.orespawn.entity.birds.birds13",
+    "sounds": [
+      {
+        "name": "orespawn:entity/birds/birds13",
+        "stream": true
+      }
+    ]
+  },
+  "entity.birds.birds14": {
+    "subtitle": "subtitles.orespawn.entity.birds.birds14",
+    "sounds": [
+      {
+        "name": "orespawn:entity/birds/birds14",
+        "stream": true
+      }
+    ]
+  },
+  "entity.birds.birds15": {
+    "subtitle": "subtitles.orespawn.entity.birds.birds15",
+    "sounds": [
+      {
+        "name": "orespawn:entity/birds/birds15",
+        "stream": true
+      }
+    ]
+  },
+  "entity.birds.birds16": {
+    "subtitle": "subtitles.orespawn.entity.birds.birds16",
+    "sounds": [
+      {
+        "name": "orespawn:entity/birds/birds16",
+        "stream": true
+      }
+    ]
+  },
+  "entity.birds.birds17": {
+    "subtitle": "subtitles.orespawn.entity.birds.birds17",
+    "sounds": [
+      {
+        "name": "orespawn:entity/birds/birds17",
+        "stream": true
+      }
+    ]
+  },
+  "entity.birds.birds18": {
+    "subtitle": "subtitles.orespawn.entity.birds.birds18",
+    "sounds": [
+      {
+        "name": "orespawn:entity/birds/birds18",
+        "stream": true
+      }
+    ]
+  },
+  "entity.birds.birds19": {
+    "subtitle": "subtitles.orespawn.entity.birds.birds19",
+    "sounds": [
+      {
+        "name": "orespawn:entity/birds/birds19",
+        "stream": true
+      }
+    ]
+  },
+  "entity.birds.birds20": {
+    "subtitle": "subtitles.orespawn.entity.birds.birds20",
+    "sounds": [
+      {
+        "name": "orespawn:entity/birds/birds20",
+        "stream": true
+      }
+    ]
+  },
+  "entity.birds.birds21": {
+    "subtitle": "subtitles.orespawn.entity.birds.birds21",
+    "sounds": [
+      {
+        "name": "orespawn:entity/birds/birds21",
+        "stream": true
+      }
+    ]
+  },
+  "entity.birds.birds22": {
+    "subtitle": "subtitles.orespawn.entity.birds.birds22",
+    "sounds": [
+      {
+        "name": "orespawn:entity/birds/birds22",
+        "stream": true
+      }
+    ]
+  },
+  "entity.birds.birds23": {
+    "subtitle": "subtitles.orespawn.entity.birds.birds23",
+    "sounds": [
+      {
+        "name": "orespawn:entity/birds/birds23",
+        "stream": true
+      }
+    ]
+  },
+  "entity.gammametroid.living": {
+    "subtitle": "subtitles.orespawn.entity.gammametroid.living",
+    "sounds": [
+      {
+        "name": "orespawn:entity/gammametroid/living",
+        "stream": true
+      }
+    ]
+  },
+  "entity.alien.living": {
+    "subtitle": "subtitles.orespawn.entity.alien.living",
+    "sounds": [
+      {
+        "name": "orespawn:entity/alien/living",
+        "stream": true
+      }
+    ]
+  },
+  "entity.alien.hurt": {
+    "subtitle": "subtitles.orespawn.entity.alien.hurt",
+    "sounds": [
+      {
+        "name": "orespawn:entity/alien/hurt",
+        "stream": true
+      }
+    ]
+  },
+  "entity.alien.death": {
+    "subtitle": "subtitles.orespawn.entity.alien.death",
+    "sounds": [
+      {
+        "name": "orespawn:entity/alien/death",
+        "stream": true
+      }
+    ]
+  },
+  "entity.misc.little_splat": {
+    "subtitle": "subtitles.orespawn.entity.misc.little_splat",
+    "sounds": [
+      {
+        "name": "orespawn:entity/misc/little_splat",
+        "stream": true
+      }
+    ]
+  },
+  "entity.misc.big_splat": {
+    "subtitle": "subtitles.orespawn.entity.misc.big_splat",
+    "sounds": [
+      {
+        "name": "orespawn:entity/misc/big_splat",
+        "stream": true
+      }
+    ]
+  },
+  "entity.stinkbug.fart1": {
+    "subtitle": "subtitles.orespawn.entity.stinkbug.fart1",
+    "sounds": [
+      {
+        "name": "orespawn:entity/stinkbug/fart1",
+        "stream": true
+      }
+    ]
+  },
+  "entity.stinkbug.fart2": {
+    "subtitle": "subtitles.orespawn.entity.stinkbug.fart2",
+    "sounds": [
+      {
+        "name": "orespawn:entity/stinkbug/fart2",
+        "stream": true
+      }
+    ]
+  },
+  "entity.stinkbug.fart3": {
+    "subtitle": "subtitles.orespawn.entity.stinkbug.fart3",
+    "sounds": [
+      {
+        "name": "orespawn:entity/stinkbug/fart3",
+        "stream": true
+      }
+    ]
+  },
+  "entity.stinkbug.fart4": {
+    "subtitle": "subtitles.orespawn.entity.stinkbug.fart4",
+    "sounds": [
+      {
+        "name": "orespawn:entity/stinkbug/fart4",
+        "stream": true
+      }
+    ]
+  },
+  "entity.stinkbug.fart5": {
+    "subtitle": "subtitles.orespawn.entity.stinkbug.fart5",
+    "sounds": [
+      {
+        "name": "orespawn:entity/stinkbug/fart5",
+        "stream": true
+      }
+    ]
+  },
+  "entity.stinkbug.fart6": {
+    "subtitle": "subtitles.orespawn.entity.stinkbug.fart6",
+    "sounds": [
+      {
+        "name": "orespawn:entity/stinkbug/fart6",
+        "stream": true
+      }
+    ]
+  },
+  "entity.stinkbug.fart7": {
+    "subtitle": "subtitles.orespawn.entity.stinkbug.fart7",
+    "sounds": [
+      {
+        "name": "orespawn:entity/stinkbug/fart7",
+        "stream": true
+      }
+    ]
+  },
+  "entity.stinkbug.fart8": {
+    "subtitle": "subtitles.orespawn.entity.stinkbug.fart8",
+    "sounds": [
+      {
+        "name": "orespawn:entity/stinkbug/fart8",
+        "stream": true
+      }
+    ]
+  },
+  "entity.stinkbug.fart9": {
+    "subtitle": "subtitles.orespawn.entity.stinkbug.fart9",
+    "sounds": [
+      {
+        "name": "orespawn:entity/stinkbug/fart9",
+        "stream": true
+      }
+    ]
+  },
+  "entity.basilisk.ambient": {
+    "sounds": [
+      "orespawn:basilisk_living"
+    ]
+  },
+  "entity.basilisk.hurt": {
+    "sounds": [
+      "orespawn:alo_hurt"
+    ]
+  },
+  "entity.basilisk.death": {
+    "sounds": [
+      "orespawn:emperorscorpion_death"
+    ]
+  },
+  "entity.scorpion.attack": {
+    "sounds": [
+      "orespawn:scorpion_attack"
+    ]
+  },
+  "entity.scorpion.hit": {
+    "sounds": [
+      "orespawn:scorpion_hit"
+    ]
+  },
+  "entity.scorpion.living": {
+    "sounds": [
+      "orespawn:scorpion_living"
+    ]
+  }
+}

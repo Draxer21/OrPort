@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "ingredient": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "orespawn:cryolophosaurus_ore"
+          }
+        ]
+      }
+    },
+    "known": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "orespawn:cryolophosaurus_egg"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "ingredient",
+      "known"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "orespawn:cryolophosaurus_egg"
+    ]
+  }
+}

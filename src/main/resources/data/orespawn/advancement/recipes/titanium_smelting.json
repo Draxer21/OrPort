@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "ingredient": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "orespawn:titanium_ore"
+          }
+        ]
+      }
+    },
+    "known": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "orespawn:titanium_smelting"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "ingredient",
+      "known"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "orespawn:titanium_smelting"
+    ]
+  }
+}

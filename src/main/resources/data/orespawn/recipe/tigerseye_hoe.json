@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "YY ",
+    " Z ",
+    " Z "
+  ],
+  "key": {
+    "Y": "orespawn:tigerseye",
+    "Z": "minecraft:stick"
+  },
+  "result": {
+    "id": "orespawn:tigerseye_hoe"
+  }
+}

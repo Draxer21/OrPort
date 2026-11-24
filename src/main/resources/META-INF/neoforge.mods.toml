@@ -1,0 +1,22 @@
+modLoader="javafml"
+loaderVersion="[1,)"
+license="See original OreSpawn distribution"
+[[mods]]
+modId="orespawn"
+version="0.3.3"
+displayName="OreSpawn 26.2 (port experimental)"
+description="Minerals, fossil ores and equipment from ConquerantFix."
+[[dependencies.orespawn]]
+modId="neoforge"
+type="required"
+versionRange="[26.2.0.93,26.3)"
+ordering="NONE"
+side="BOTH"
+[[dependencies.orespawn]]
+modId="minecraft"
+type="required"
+versionRange="[26.2]"
+ordering="NONE"
+side="BOTH"
+
+

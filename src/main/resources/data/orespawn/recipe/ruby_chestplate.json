@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "Y Y",
+    "YYY",
+    "YYY"
+  ],
+  "key": {
+    "Y": "orespawn:ruby"
+  },
+  "result": {
+    "id": "orespawn:ruby_chestplate"
+  }
+}

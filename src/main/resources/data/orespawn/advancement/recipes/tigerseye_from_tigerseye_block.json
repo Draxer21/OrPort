@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "ingredient": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "orespawn:tigerseye_block"
+          }
+        ]
+      }
+    },
+    "known": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "orespawn:tigerseye_from_tigerseye_block"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "ingredient",
+      "known"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "orespawn:tigerseye_from_tigerseye_block"
+    ]
+  }
+}

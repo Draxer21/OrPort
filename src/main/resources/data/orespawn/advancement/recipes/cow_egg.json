@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "ingredient": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "orespawn:cow_ore"
+          }
+        ]
+      }
+    },
+    "known": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "orespawn:cow_egg"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "ingredient",
+      "known"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "orespawn:cow_egg"
+    ]
+  }
+}

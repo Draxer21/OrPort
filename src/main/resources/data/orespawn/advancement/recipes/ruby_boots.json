@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "ingredient": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "orespawn:ruby"
+          }
+        ]
+      }
+    },
+    "known": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "orespawn:ruby_boots"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "ingredient",
+      "known"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "orespawn:ruby_boots"
+    ]
+  }
+}

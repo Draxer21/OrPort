@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": "orespawn:titanium_ore",
+  "result": {
+    "id": "orespawn:titanium_nugget"
+  },
+  "experience": 0.4,
+  "cookingtime": 200
+}

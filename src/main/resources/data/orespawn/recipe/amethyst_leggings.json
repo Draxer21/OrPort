@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "YYY",
+    "Y Y",
+    "Y Y"
+  ],
+  "key": {
+    "Y": "orespawn:amethyst"
+  },
+  "result": {
+    "id": "orespawn:amethyst_leggings"
+  }
+}

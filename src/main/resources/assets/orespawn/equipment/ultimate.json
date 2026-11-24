@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "orespawn:ultimate"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "orespawn:ultimate"
+      }
+    ]
+  }
+}

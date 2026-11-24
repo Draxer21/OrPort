@@ -1,0 +1,9 @@
+{
+  "parent": "orespawn:block/ant_block_parent",
+  "textures": {
+    "particle": "minecraft:block/dirt",
+    "bottom": "orespawn:block/antnest_bottom",
+    "top": "orespawn:block/antnest_top",
+    "side": "orespawn:block/antnest_side"
+  }
+}

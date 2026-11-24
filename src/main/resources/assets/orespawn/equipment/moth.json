@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "orespawn:moth"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "orespawn:moth"
+      }
+    ]
+  }
+}

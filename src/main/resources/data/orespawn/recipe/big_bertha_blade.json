@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " T ",
+    "UMU",
+    " T "
+  ],
+  "key": {
+    "T": "orespawn:trextooth",
+    "U": "orespawn:ultimate_sword",
+    "M": "orespawn:worm_tooth"
+  },
+  "result": {
+    "id": "orespawn:big_bertha_blade"
+  }
+}
+

@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "orespawn:mining",
+  "features": "orespawn:mining_dungeon",
+  "step": "underground_structures"
+}

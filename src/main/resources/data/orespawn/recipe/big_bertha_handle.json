@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "orespawn:big_hammer",
+    "orespawn:mantis_claw",
+    "orespawn:green_goo",
+    "orespawn:uranium_ingot"
+  ],
+  "result": {
+    "id": "orespawn:big_bertha_handle"
+  }
+}

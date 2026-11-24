@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "B",
+    "G",
+    "H"
+  ],
+  "key": {
+    "B": "orespawn:big_bertha_blade",
+    "G": "orespawn:big_bertha_guard",
+    "H": "orespawn:big_bertha_handle"
+  },
+  "result": {
+    "id": "orespawn:big_bertha"
+  }
+}

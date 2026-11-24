@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "orespawn:cow_ore",
+    "minecraft:water_bucket"
+  ],
+  "result": {
+    "id": "minecraft:cow_spawn_egg",
+    "count": 1
+  }
+}

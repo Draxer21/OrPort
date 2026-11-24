@@ -1,0 +1,6 @@
+{
+  "parent": "block/crop",
+  "textures": {
+    "crop": "orespawn:block/corn_plant3"
+  }
+}

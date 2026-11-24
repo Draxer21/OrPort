@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:water_bucket",
+    "orespawn:emperor_scorpion_ore"
+  ],
+  "result": {
+    "id": "orespawn:emperor_scorpion_egg"
+  }
+}

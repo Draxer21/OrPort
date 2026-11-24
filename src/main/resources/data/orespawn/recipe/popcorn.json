@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": "orespawn:corn",
+  "result": {
+    "id": "orespawn:popcorn"
+  },
+  "experience": 0.15,
+  "cookingtime": 100
+}

@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:water_bucket",
+    "orespawn:gammametroid_ore"
+  ],
+  "result": {
+    "id": "orespawn:gammametroid_egg"
+  }
+}

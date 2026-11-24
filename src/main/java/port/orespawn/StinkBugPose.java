@@ -1,0 +1,80 @@
+package port.orespawn;
+import net.minecraft.client.model.geom.ModelPart;
+
+final class StinkBugPose extends CreaturePose {
+    private final ModelPart f6, b10, l6, l4, f4, l5, f5, l3, l2, l1, f3, f2, f1, jaw, b9, head, b4, h1, h2, body, t21, tail, t22, t20, t19, t6, t11, t9, t4, t2, t7, t12, t10, t8, t5, t3, t1, t18, t16, t14, t13, t15, t17, b1, b2, b3, b8, b7, b6, b5;
+    StinkBugPose(ModelPart root,float speed,float scale) {
+        super(root,speed,scale);
+        this.f6=root.getChild("f6");
+        this.b10=root.getChild("b10");
+        this.l6=root.getChild("l6");
+        this.l4=root.getChild("l4");
+        this.f4=root.getChild("f4");
+        this.l5=root.getChild("l5");
+        this.f5=root.getChild("f5");
+        this.l3=root.getChild("l3");
+        this.l2=root.getChild("l2");
+        this.l1=root.getChild("l1");
+        this.f3=root.getChild("f3");
+        this.f2=root.getChild("f2");
+        this.f1=root.getChild("f1");
+        this.jaw=root.getChild("jaw");
+        this.b9=root.getChild("b9");
+        this.head=root.getChild("head");
+        this.b4=root.getChild("b4");
+        this.h1=root.getChild("h1");
+        this.h2=root.getChild("h2");
+        this.body=root.getChild("body");
+        this.t21=root.getChild("t21");
+        this.tail=root.getChild("tail");
+        this.t22=root.getChild("t22");
+        this.t20=root.getChild("t20");
+        this.t19=root.getChild("t19");
+        this.t6=root.getChild("t6");
+        this.t11=root.getChild("t11");
+        this.t9=root.getChild("t9");
+        this.t4=root.getChild("t4");
+        this.t2=root.getChild("t2");
+        this.t7=root.getChild("t7");
+        this.t12=root.getChild("t12");
+        this.t10=root.getChild("t10");
+        this.t8=root.getChild("t8");
+        this.t5=root.getChild("t5");
+        this.t3=root.getChild("t3");
+        this.t1=root.getChild("t1");
+        this.t18=root.getChild("t18");
+        this.t16=root.getChild("t16");
+        this.t14=root.getChild("t14");
+        this.t13=root.getChild("t13");
+        this.t15=root.getChild("t15");
+        this.t17=root.getChild("t17");
+        this.b1=root.getChild("b1");
+        this.b2=root.getChild("b2");
+        this.b3=root.getChild("b3");
+        this.b8=root.getChild("b8");
+        this.b7=root.getChild("b7");
+        this.b6=root.getChild("b6");
+        this.b5=root.getChild("b5");
+    }
+    @Override void animate(CreatureFrame state,float f,float f1,float f2,float f3,float f4) {
+      float newangle = 0.0F;
+      newangle = sin(f2 * 3.1F * this.wingspeed) * (float) Math.PI * 0.3F * f1;
+      this.f1.xRot = this.f3.xRot = this.f5.xRot = newangle;
+      this.f2.xRot = this.f4.xRot = this.f6.xRot = -newangle;
+      newangle = sin(f2 * 0.4F * this.wingspeed) * (float) Math.PI * 0.2F;
+      this.b9.zRot = newangle;
+      this.b10.zRot = -newangle;
+      newangle = sin(f2 * 0.2F * this.wingspeed) * (float) Math.PI * 0.04F;
+      this.jaw.xRot = 0.18F + newangle;
+      this.h1.xRot = 0.52F + sin(f2 * 0.4F * this.wingspeed) * (float) Math.PI * 0.15F;
+      this.h1.yRot = -0.3F + sin(f2 * 0.43F * this.wingspeed) * (float) Math.PI * 0.15F;
+      this.h2.xRot = 0.52F + sin(f2 * 0.46F * this.wingspeed) * (float) Math.PI * 0.15F;
+      this.h2.yRot = 0.3F + sin(f2 * 0.49F * this.wingspeed) * (float) Math.PI * 0.15F;
+      this.tail.xRot = -0.2F + sin(f2 * 0.1F * this.wingspeed) * (float) Math.PI * 0.1F;
+      this.t1.xRot = this.t2.xRot = this.t3.xRot = this.t4.xRot = this.t5.xRot = this.tail.xRot;
+      this.t6.xRot = this.t7.xRot = this.t8.xRot = this.t9.xRot = this.t10.xRot = this.tail.xRot;
+      this.t11.xRot = this.t12.xRot = this.t13.xRot = this.t14.xRot = this.t15.xRot = this.tail.xRot;
+      this.t16.xRot = this.t17.xRot = this.t18.xRot = this.t19.xRot = this.t20.xRot = this.tail.xRot;
+      this.t21.xRot = this.t22.xRot = this.tail.xRot;
+    }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:water_bucket",
+    "orespawn:basilisk_ore"
+  ],
+  "result": {
+    "id": "orespawn:basilisk_egg"
+  }
+}

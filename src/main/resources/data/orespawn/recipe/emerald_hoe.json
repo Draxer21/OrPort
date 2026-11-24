@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "YY ",
+    " Z ",
+    " Z "
+  ],
+  "key": {
+    "Y": "minecraft:emerald",
+    "Z": "minecraft:stick"
+  },
+  "result": {
+    "id": "orespawn:emerald_hoe"
+  }
+}

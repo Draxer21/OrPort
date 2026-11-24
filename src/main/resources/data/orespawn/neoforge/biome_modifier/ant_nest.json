@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#minecraft:is_overworld",
+  "features": "orespawn:ant_nest",
+  "step": "vegetal_decoration"
+}

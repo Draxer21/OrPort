@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "   ",
+    "YYY",
+    "Y Y"
+  ],
+  "key": {
+    "Y": "orespawn:tigerseye"
+  },
+  "result": {
+    "id": "orespawn:tigerseye_helmet"
+  }
+}

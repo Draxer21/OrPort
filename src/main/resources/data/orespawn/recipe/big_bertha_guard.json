@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "orespawn:titanium_ingot",
+    "orespawn:moth_scale",
+    "orespawn:basilisk_scale",
+    "orespawn:emperor_scorpion_scale"
+  ],
+  "result": {
+    "id": "orespawn:big_bertha_guard"
+  }
+}
