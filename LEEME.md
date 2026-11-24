@@ -90,7 +90,7 @@ Clic derecho con la mano principal vacía sobre la hormiga. Desde cualquier dime
 
 | Hormiga | Dimensión | Cómo es |
 |---|---|---|
-| Arcoíris | `orespawn:villages` (Villages del clásico) | Terreno normal con un solo bioma de llanura y aldeas cada 9 chunks, en vez de 32. Aparecen luciérnagas, vacas rojas, mariposas y polillas, y hay hormigueros rojo, arcoíris e inestable. |
+| Arcoíris | `orespawn:villages` (Villages del clásico) | Terreno normal sin océanos (las cuencas se rellenan hasta la altura 64), con un solo bioma de llanura y aldeas cada 9 chunks, en vez de 32. Aparecen luciérnagas, vacas rojas, mariposas y polillas, y hay hormigueros rojo, arcoíris e inestable. |
 | Inestable | `orespawn:danger` (Danger Dimension) | Mundo plano: lecho de roca, seis capas de tierra y césped, con entre 1 y 10 árboles retorcidos por chunk. Aparecen mariposas, polillas, luciérnagas y el escarabajo Hércules. |
 
 Los hormigueros arcoíris e inestable aparecen sobre césped en el mundo principal (uno cada 120 chunks de media, la frecuencia del clásico) y generan sus hormigas como el rojo. También hay huevos.
