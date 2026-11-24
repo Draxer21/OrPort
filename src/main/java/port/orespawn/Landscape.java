@@ -97,16 +97,23 @@ final class Landscape {
 
         @Override public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
             var level = context.level(); var random = context.random(); var origin = context.origin();
-            if (!level.getBlockState(origin.below()).is(Blocks.GRASS_BLOCK)) return false;
-            int trunk = 1 + random.nextInt(3), top = trunk + random.nextInt(12);
+            // Como el clásico, busca en la columna el césped con aire encima en lugar de fiarse del mapa de alturas.
+            int bottom = Math.max(level.getMinY(), origin.getY() - 64), top = Math.min(level.getMaxY() - 1, origin.getY() + 128);
+            origin = null;
+            for (int y = top; y > bottom; y--) {
+                var pos = new BlockPos(context.origin().getX(), y, context.origin().getZ());
+                if (level.getBlockState(pos.below()).is(Blocks.GRASS_BLOCK) && level.isEmptyBlock(pos)) { origin = pos; break; }
+            }
+            if (origin == null) return false;
+            int trunk = 1 + random.nextInt(3), height = trunk + random.nextInt(12);
             for (int i = 1; i < trunk; i++) if (!open(level, origin.above(i))) return false;
             for (int i = 0; i < trunk; i++) level.setBlock(origin.above(i), LOG, 2);
             var pos = origin.above(trunk - 1);
-            for (int i = trunk; i < top; i++) {
+            for (int i = trunk; i < height; i++) {
                 pos = pos.offset(random.nextInt(2) - random.nextInt(2), random.nextInt(4) > 0 ? 1 : 0, random.nextInt(2) - random.nextInt(2));
                 if (!open(level, pos)) break;
                 level.setBlock(pos, LOG, 2);
-                if (random.nextInt(4) == 1) branch(level, random, pos, random.nextInt(1 + top - i),
+                if (random.nextInt(4) == 1) branch(level, random, pos, random.nextInt(1 + height - i),
                     random.nextInt(2) - random.nextInt(2), random.nextInt(2) - random.nextInt(2));
                 leaves(level, random, pos);
             }
