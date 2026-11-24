@@ -51,6 +51,7 @@ jobs:
           status=$?
           sleep 10
           grep -nE "Exception|ERROR" server.log | grep -v "Couldn't connect" | head -80 || true
+          if [ $status != 0 ]; then grep -nE -A4 "Registry loading errors|Failed to parse|Caused by|> Errors in element" server.log | head -60 || true; fi
           exit $status
 
       - name: Prueba de cliente con capturas
