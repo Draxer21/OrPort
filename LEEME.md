@@ -1,4 +1,4 @@
-# OreSpawn 0.3.4 · Proyecto fuente para Minecraft 26.2
+# OreSpawn 0.3.5 · Proyecto fuente para Minecraft 26.2
 Esta entrega contiene el proyecto editable. Cada envío al repositorio compila el JAR en GitHub Actions (pestaña Actions, artefacto `orespawn-jar`).
 
 ## Compilar en Windows
@@ -82,3 +82,27 @@ Primera versión compilada y probada automáticamente en un servidor NeoForge 26
 - **Comprobado en servidor.** Estadísticas, botín de ambos, huevos desde dispensador, jaulas llenas que liberan, jaulas vacías que capturan, caza de una vaca, veneno e invocación de escorpiones del emperador.
 - **Mantis.** Aparecía con peso 10 en todo el mundo principal y a cualquier altura; en una prueba surgieron cuatro jefes en minutos. Ahora sigue al clásico: peso 1, altura 50 o más y ninguna otra mantis en 32 bloques. Los biomas siguen siendo todos los del mundo principal; el clásico la limitaba a bosques, colinas boscosas, jungla, llanuras, pantanos y bosque de abedules, entre otros.
 - **Aviso de ajustes experimentales.** Al abrir un mundo con el mod, Minecraft avisa una vez de ajustes experimentales por la dimensión minera. Basta con aceptar.
+
+
+## Hormigas arcoíris e inestable en 0.3.5
+
+Clic derecho con la mano principal vacía sobre la hormiga. Desde cualquier dimensión lleva a la suya; dentro de ella, devuelve al mundo principal. Al llegar aparece una hormiga de vuelta si no hay ninguna cerca. Ambas son pasivas, tienen 1 de vida y huyen al recibir daño.
+
+| Hormiga | Dimensión | Cómo es |
+|---|---|---|
+| Arcoíris | `orespawn:villages` (Villages del clásico) | Terreno normal sin océanos (las cuencas se rellenan hasta la altura 64), con un solo bioma de llanura y aldeas cada 9 chunks, en vez de 32. Aparecen luciérnagas, vacas rojas, mariposas y polillas, y hay hormigueros rojo, arcoíris e inestable. |
+| Inestable | `orespawn:danger` (Danger Dimension) | Mundo plano: lecho de roca, seis capas de tierra y césped, con entre 1 y 10 árboles retorcidos por chunk. Aparecen mariposas, polillas, luciérnagas y el escarabajo Hércules. |
+
+Los hormigueros arcoíris e inestable aparecen sobre césped en el mundo principal (uno cada 120 chunks de media, la frecuencia del clásico) y generan sus hormigas como el rojo. También hay huevos.
+
+Comandos para probar:
+- `/summon orespawn:rainbow_ant` y `/summon orespawn:unstable_ant`
+- `/give @s orespawn:rainbow_ant_block` y `/give @s orespawn:unstable_ant_block`
+- `/execute in orespawn:villages run locate structure orespawn:village`
+- `/execute in orespawn:danger run tp @s 0 -56 0`
+
+Adaptaciones provisionales:
+- **Criaturas pendientes.** Las criaturas propias de estas dimensiones aún no están portadas: robots, Godzilla y vacas doradas en Villages; Creeping Horror, Terrible Terror, Ender Reaper, Cliff Racer y otras en la Danger Dimension. Por eso Villages no tiene monstruos y la Danger Dimension todavía no es peligrosa.
+- **Hojas de manzano.** Los árboles retorcidos usan hojas de roble persistentes en lugar de las hojas de manzano.
+- **Mascotas.** El clásico llevaba consigo las mascotas que no estaban sentadas; el port todavía no lo hace.
+- **Vaca roja.** Se dibuja con el modelo de vaca de 1.7.10 que usaba el clásico. El modelo de vaca actual tiene otra disposición de textura y deformaba `red_cow.png`.

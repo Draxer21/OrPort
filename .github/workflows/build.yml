@@ -42,8 +42,10 @@ jobs:
           echo "eula=true" > run/eula.txt
           cp .github/smoke/server.properties run/server.properties
           ./gradlew runServer --no-daemon > server.log 2>&1 &
+          gpid=$!
           for i in $(seq 1 120); do
             grep -q "RCON running" server.log && break
+            kill -0 $gpid 2>/dev/null || break
             sleep 5
           done
           set +e
@@ -51,6 +53,7 @@ jobs:
           status=$?
           sleep 10
           grep -nE "Exception|ERROR" server.log | grep -v "Couldn't connect" | head -80 || true
+          if [ $status != 0 ]; then grep -nE -A4 "Registry loading errors|Failed to parse|Caused by|> Errors in element" server.log | head -60 || true; fi
           exit $status
 
       - name: Prueba de cliente con capturas
@@ -59,6 +62,10 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y -qq xvfb imagemagick xdotool mesa-utils libgl1-mesa-dri > /dev/null
           bash .github/smoke/client_test.sh
+
+      - name: Prueba de viajes con hormigas
+        if: always()
+        run: bash .github/smoke/travel_test.sh
 
       - name: Subir registros y capturas
         if: always()
