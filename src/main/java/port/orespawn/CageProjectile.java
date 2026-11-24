@@ -20,7 +20,7 @@ final class CageProjectile extends ThrowableItemProjectile {
         if (cage.species != null) {
             var type = BuiltInRegistries.ENTITY_TYPE.getValue(Identifier.parse(cage.species));
             var pos = hit instanceof BlockHitResult b ? b.getBlockPos().relative(b.getDirection()) : blockPosition();
-            var released = type == null ? null : type.spawn(server, pos, EntitySpawnReason.SPAWN_ITEM_USE);
+            var released = type == null ? null : type.spawn(server, pos, EntitySpawnReason.BUCKET);
             if (released != null) {
                 if (released instanceof Companion pet) pet.unpack(getItem());
                 if (getItem().has(DataComponents.CUSTOM_NAME)) released.setCustomName(getItem().get(DataComponents.CUSTOM_NAME));

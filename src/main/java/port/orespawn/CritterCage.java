@@ -87,7 +87,7 @@ public final class CritterCage extends Item {
             var type = BuiltInRegistries.ENTITY_TYPE.getValue(Identifier.parse(species));
             var pos = context.getClickedPos().relative(context.getClickedFace());
             if (type == null || !player.mayUseItemAt(pos, context.getClickedFace(), context.getItemInHand())) return InteractionResult.FAIL;
-            var mob = type.spawn(server, context.getItemInHand(), player, pos, EntitySpawnReason.SPAWN_ITEM_USE, true, false);
+            var mob = type.spawn(server, context.getItemInHand(), player, pos, EntitySpawnReason.BUCKET, true, false);
             if (mob == null) return InteractionResult.FAIL;
             if (mob instanceof Companion pet) pet.unpack(context.getItemInHand());
             if (mob instanceof Mob living) living.setPersistenceRequired();

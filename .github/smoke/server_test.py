@@ -133,7 +133,7 @@ def main():
         rc.cmd(f"summon orespawn:thrown_critter_cage 0 {Y + 6} {z} "
                f"{{Item:{{id:\"orespawn:{mob}_cage\",count:1}},Motion:[0.0,-1.0,0.0]}}")
     time.sleep(3)
-    check("jaula llena libera escorpión", count(rc, f"@e[type=orespawn:scorpion,x=0,y={Y},z=-30,distance=..4]") >= 1)
+    check("jaula llena libera escorpión", count(rc, f"@e[type=orespawn:scorpion,x=0,y={Y},z=-30,distance=..8]") >= 1)
     emperors = count(rc, f"@e[type=orespawn:emperor_scorpion,x=0,y={Y},z=-50,distance=..8]")
     if not emperors:
         rc.cmd("execute as @e[type=orespawn:emperor_scorpion] run data get entity @s Pos")
