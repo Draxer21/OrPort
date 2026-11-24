@@ -33,6 +33,10 @@ pkill -f java || true
 grep -nE "Exception|ERROR|orespawn.*(WARN|ERROR)" client.log | grep -viE "realms|telemetry|narrator|openal|sound|Couldn't connect" | head -60 > shots/errores_cliente.txt || true
 cp client.log shots/client.log
 # Las capturas también van al registro en base64 para poder revisarlas sin descargar artefactos.
+# Recortes a resolución completa del centro de la escena.
+for n in 1 3 5; do
+  [ -e "shots/escena_$n.png" ] && convert "shots/escena_$n.png" -crop 560x300+360+330 "shots/detalle_$n.png"
+done
 for f in shots/*.png; do
   [ -e "$f" ] || continue
   convert "$f" -resize 800x -quality 70 "/tmp/$(basename "$f" .png).jpg"
