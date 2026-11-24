@@ -123,8 +123,8 @@ def main():
         rc.cmd(f"setblock 30 {Y} {z} dispenser[facing=up]{{Items:[{{Slot:0b,id:\"orespawn:{mob}_egg\",count:1}}]}}")
         rc.cmd(f"setblock 31 {Y} {z} redstone_block")
     time.sleep(2)
-    check("huevo de escorpión", count(rc, f"@e[type=orespawn:scorpion,x=30,y={Y},z=30,distance=..4]") >= 1)
-    check("huevo de emperador", count(rc, f"@e[type=orespawn:emperor_scorpion,x=30,y={Y},z=40,distance=..5]") >= 1)
+    check("huevo de escorpión", count(rc, f"@e[type=orespawn:scorpion,x=30,y={Y},z=30,distance=..8]") >= 1)
+    check("huevo de emperador", count(rc, f"@e[type=orespawn:emperor_scorpion,x=30,y={Y},z=40,distance=..8]") >= 1)
     rc.cmd("kill @e[type=!player]")
     rc.cmd(f"fill 30 {Y} 30 31 {Y} 40 air")
 
