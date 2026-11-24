@@ -12,7 +12,7 @@ fallos=0
 viaje() {
   local name=$1 dim=$2 x=$3 y=$4 z=$5 expect=$6
   rm -rf "run/saves/$name" && cp -r run/world "run/saves/$name"
-  python3 .github/smoke/place_player.py "run/saves/$name/level.dat" "$dim" "$x" "$y" "$z" 0 $PITCH
+  python3 .github/smoke/place_player.py "run/saves/$name" "$dim" "$x" "$y" "$z" 0 $PITCH
   ./gradlew runClient -PquickPlay="$name" --no-daemon > "client_$name.log" 2>&1 &
   local pid=$! joined=0
   for i in $(seq 1 90); do

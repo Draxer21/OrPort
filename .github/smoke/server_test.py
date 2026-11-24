@@ -199,8 +199,9 @@ def main():
     bedrock = rc.cmd("execute in orespawn:danger if block 5 -64 5 minecraft:bedrock")
     check("Danger Dimension: capas del clásico", "passed" in grass and "passed" in bedrock, f"{grass} / {bedrock}")
     logs = rc.cmd("execute in orespawn:danger run fill -16 -56 -16 15 -36 15 minecraft:oak_log replace minecraft:oak_log")
-    m = re.search(r"(\d+)", logs)
-    check("Danger Dimension: árboles retorcidos", m is not None and "filled" in logs.lower(), logs)
+    check("Danger Dimension: árboles retorcidos", "successfully" in logs.lower(), logs)
+    placed = rc.cmd("execute in orespawn:danger run place feature orespawn:scraggly_tree 8 -56 8")
+    check("árbol retorcido con /place feature", "placed" in placed.lower() and "fail" not in placed.lower(), placed)
     #    Villages: terreno normal y aldeas cada pocos chunks
     found = rc.cmd("execute in orespawn:villages run locate structure orespawn:village")
     m = re.search(r"\((\d+) blocks? away\)", found)
@@ -219,9 +220,7 @@ def main():
     rc.cmd("execute in orespawn:danger run fill 15 -56 15 25 -40 25 minecraft:air")
     rc.cmd("execute in orespawn:danger run summon orespawn:unstable_ant 20.5 -56 21.5 {NoAI:1b,PersistenceRequired:1b,Tags:[\"trip\"]}")
     time.sleep(2)
-    trips = sum(count(rc, f"@e[tag=trip]") for _ in [0])
-    trips += int(re.search(r"(\d+)", rc.cmd("execute in orespawn:villages if entity @e[tag=trip]") + " 0").group(1))
-    trips += int(re.search(r"(\d+)", rc.cmd("execute in orespawn:danger if entity @e[tag=trip]") + " 0").group(1))
+    trips = count(rc, "@e[tag=trip]")  # @e sin posición abarca todas las dimensiones
     check("escenarios de viaje preparados", trips == 4, f"hormigas={trips}")
 
     # 9. Escena para la prueba de cliente (capturas con Xvfb). El jugador aparece en 0,0 mirando al sur.
