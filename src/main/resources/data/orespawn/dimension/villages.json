@@ -6,6 +6,6 @@
       "type": "minecraft:fixed",
       "biome": "orespawn:villages"
     },
-    "settings": "minecraft:overworld"
+    "settings": "orespawn:villages"
   }
 }

@@ -48,7 +48,7 @@ if [ $joined = 1 ]; then
   viaje inestable_vuelta orespawn:danger    20.5 -56 minecraft:overworld
   # Vistas de las dos dimensiones en modo espectador.
   comando "/gamemode spectator"
-  comando "/execute in orespawn:villages run tp @s 16 105 -14 0 30"
+  comando "/execute in orespawn:villages run tp @s 16 110 -20 0 30"
   sleep 35
   import -window root "shots/villages_paisaje.png"
   comando "/execute in orespawn:danger run tp @s 40 -50 -40 0 10"
