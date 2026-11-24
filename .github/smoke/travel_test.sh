@@ -12,7 +12,7 @@ fallos=0
 viaje() {
   local name=$1 dim=$2 x=$3 y=$4 z=$5 expect=$6
   rm -rf "run/saves/$name" && cp -r run/world "run/saves/$name"
-  python3 -I .github/smoke/place_player.py "run/saves/$name/level.dat" "$dim" "$x" "$y" "$z" 0 $PITCH
+  python3 .github/smoke/place_player.py "run/saves/$name/level.dat" "$dim" "$x" "$y" "$z" 0 $PITCH
   ./gradlew runClient -PquickPlay="$name" --no-daemon > "client_$name.log" 2>&1 &
   local pid=$! joined=0
   for i in $(seq 1 90); do
@@ -21,6 +21,7 @@ viaje() {
     if [ $((i % 6)) = 0 ] && [ $i -ge 12 ]; then xdotool mousemove 798 429 click 1 2>/dev/null || true; fi
     sleep 5
   done
+  grep -m2 -iE "Setting user|uuid" "client_$name.log" || true
   if [ $joined = 1 ]; then
     sleep 20
     import -window root "shots/${name}_antes.png"
