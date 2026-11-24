@@ -1,5 +1,5 @@
-# OreSpawn 0.3.3 · Proyecto fuente para Minecraft 26.2
-Esta entrega contiene el proyecto editable. La última compilación distribuida es la 0.3.2.
+# OreSpawn 0.3.4 · Proyecto fuente para Minecraft 26.2
+Esta entrega contiene el proyecto editable. Cada envío al repositorio compila el JAR en GitHub Actions (pestaña Actions, artefacto `orespawn-jar`).
 
 ## Compilar en Windows
 Con Java 25, abre una terminal en la carpeta proyecto y ejecuta `gradlew.bat build`. Gradle descarga las dependencias la primera vez. El mod compilado se encuentra en `build/libs`. Usa NeoForge 26.2.0.93.
@@ -70,3 +70,13 @@ La pirámide de arenisca marca la entrada. Hay tres trazados obtenidos del gener
 Los cofres sortean de cinco a diez recompensas. Veintitrés de las 31 entradas del clásico están disponibles. Los ocho resultados correspondientes a objetos pendientes dejan el sorteo vacío. La obsidiana ocupa el lugar de los bloques de teletransporte aleatorio. El equipo de esmeralda del basilisco y el de diamante del escarabajo Hércules recuperan sus sorteos independientes de encantamiento.
 
 Se comprobó la conectividad del espacio interior de las tres plantillas, la ubicación de cofres y guardianes, las tablas y la integridad del paquete. La generación natural y la partida gráfica de esta versión quedan por comprobar en Minecraft 26.2.
+
+
+## Escorpiones en 0.3.4
+
+Primera versión compilada y probada automáticamente en un servidor NeoForge 26.2.0.93 con Java 25. Cada envío ejecuta `.github/smoke/server_test.py` por RCON y abre el cliente en una pantalla virtual para tomar capturas.
+
+- **Animación.** Se tradujo la de ModelScorpion y ModelEmperorScorpion. Las patas oscilan con el paso; las del emperador además se levantan al avanzar. Pinzas y cola se mueven en cadena, como en el clásico, y en combate lo hacen con más frecuencia. El emperador mueve las mandíbulas.
+- **Presas.** El común caza animales, aldeanos, jugadores, arañas, creepers y Velocity Raptor, a 8 bloques. El emperador ataca a todo salvo endermans, creepers, otros escorpiones e insectos pequeños, a 24 bloques. Ninguno recibe daño de cactus.
+- **Aparición natural.** Solo con poca luz, como los monstruos del clásico. El emperador, además, a partir de la altura 50 y si no hay otro emperador en 20 bloques.
+- **Comprobado en servidor.** Estadísticas, botín de ambos, huevos desde dispensador, jaulas llenas que liberan, jaulas vacías que capturan, caza de una vaca, veneno e invocación de escorpiones del emperador.
