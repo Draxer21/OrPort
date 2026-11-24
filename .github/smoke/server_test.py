@@ -1,0 +1,186 @@
+"""Prueba de humo del servidor dedicado de NeoForge por RCON.
+
+Se ejecuta en GitHub Actions con el servidor ya arrancado (./gradlew runServer).
+Sale con código 1 si falla alguna comprobación obligatoria. Las comprobaciones de IA
+dependen del azar, así que se informan sin hacer fallar la prueba.
+"""
+import re
+import socket
+import struct
+import sys
+import time
+
+HOST, PORT, PASSWORD = "127.0.0.1", 25575, "smoke"
+Y = -60  # superficie del mundo plano por defecto
+
+
+class Rcon:
+    def __init__(self):
+        self.sock = socket.create_connection((HOST, PORT), timeout=30)
+        self.req = 0
+        self._send(3, PASSWORD)
+
+    def _send(self, kind, body):
+        self.req += 1
+        data = struct.pack("<ii", self.req, kind) + body.encode() + b"\x00\x00"
+        self.sock.sendall(struct.pack("<i", len(data)) + data)
+        size = struct.unpack("<i", self._read(4))[0]
+        payload = self._read(size)
+        return payload[8:-2].decode(errors="replace")
+
+    def _read(self, n):
+        out = b""
+        while len(out) < n:
+            chunk = self.sock.recv(n - len(out))
+            if not chunk:
+                raise ConnectionError("RCON cerrado")
+            out += chunk
+        return out
+
+    def cmd(self, command):
+        reply = self._send(2, command)
+        print(f"> {command}\n  {reply}")
+        return reply
+
+
+results = []
+
+
+def check(name, ok, detail="", required=True):
+    results.append((name, ok, required))
+    mark = "OK " if ok else ("FALLO" if required else "AVISO")
+    print(f"[{mark}] {name} {detail}")
+
+
+def count(rc, selector):
+    reply = rc.cmd(f"execute if entity {selector}")
+    m = re.search(r"count: (\d+)", reply)
+    return int(m.group(1)) if m else 0
+
+
+def number(reply):
+    m = re.search(r"(-?\d+(?:\.\d+)?)", reply.split("is", 1)[-1] if " is " in reply else reply)
+    return float(m.group(1)) if m else None
+
+
+def main():
+    rc = Rcon()
+    rc.cmd("forceload add -64 -64 64 64")
+    rc.cmd("kill @e[type=!player]")
+    time.sleep(1)
+
+    # 1. Invocación y estadísticas
+    for mob, name in (("scorpion", "Scorpion"), ("emperor_scorpion", "Emperor")):
+        reply = rc.cmd(f"summon orespawn:{mob} 0 {Y} {0 if mob == 'scorpion' else 20} {{NoAI:1b,Tags:[\"stat\"]}}")
+        check(f"/summon orespawn:{mob}", "Summoned" in reply, reply)
+    expected = {"scorpion": (15, 4, 10), "emperor_scorpion": (350, 35, 20)}
+    for mob, (hp, atk, arm) in expected.items():
+        sel = f"@e[type=orespawn:{mob},tag=stat,limit=1]"
+        got = [number(rc.cmd(f"attribute {sel} minecraft:{a} get")) for a in ("max_health", "attack_damage", "armor")]
+        check(f"estadísticas de {mob} (vida, ataque, armadura)", got == [hp, atk, arm], f"{got} esperado {[hp, atk, arm]}")
+    rc.cmd("kill @e[tag=stat]")
+    time.sleep(2)
+    rc.cmd("kill @e[type=item]")
+
+    # 2. Objetos registrados
+    for item in ("scorpion_egg", "emperor_scorpion_egg", "scorpion_cage", "emperor_scorpion_cage",
+                 "emperor_scorpion_scale", "scorpion_ore", "emperor_scorpion_ore"):
+        reply = rc.cmd(f"summon item 0 {Y} -20 {{Item:{{id:\"orespawn:{item}\",count:1}},Tags:[\"probe\"]}}")
+        check(f"objeto orespawn:{item}", "Summoned" in reply, reply)
+    rc.cmd("kill @e[tag=probe]")
+
+    # 3. Botín del emperador: la escama es segura
+    rc.cmd(f"summon orespawn:emperor_scorpion 40 {Y} 0 {{NoAI:1b}}")
+    time.sleep(1)
+    rc.cmd("kill @e[type=orespawn:emperor_scorpion]")
+    time.sleep(3)
+    scale = count(rc, "@e[type=item,nbt={Item:{id:\"orespawn:emperor_scorpion_scale\"}}]")
+    obsidian = count(rc, "@e[type=item,nbt={Item:{id:\"minecraft:obsidian\"}}]")
+    frame = count(rc, "@e[type=item,nbt={Item:{id:\"minecraft:item_frame\"}}]")
+    beef = count(rc, "@e[type=item,nbt={Item:{id:\"minecraft:beef\"}}]")
+    check("botín del emperador: escama", scale >= 1, f"escamas={scale}")
+    check("botín del emperador: marco, obsidiana y carne", frame >= 1 and obsidian >= 1 and beef >= 1,
+          f"marco={frame} obsidiana={obsidian} carne={beef}")
+    rc.cmd("kill @e[type=item]")
+
+    # 4. Botín del común: 10 % por pepita de oro, uranio o titanio, de 0 a 2 unidades
+    for i in range(40):
+        rc.cmd(f"summon orespawn:scorpion {-40 + (i % 8) * 2} {Y} {-40 + (i // 8) * 2} {{NoAI:1b}}")
+    time.sleep(1)
+    rc.cmd("kill @e[type=orespawn:scorpion]")
+    time.sleep(3)
+    nuggets = sum(count(rc, f"@e[type=item,nbt={{Item:{{id:\"{n}\"}}}}]")
+                  for n in ("minecraft:gold_nugget", "orespawn:uranium_nugget", "orespawn:titanium_nugget"))
+    others = count(rc, "@e[type=item]") - nuggets
+    check("botín del común: pepitas al matar 40", nuggets >= 1 and others == 0, f"montones de pepitas={nuggets} otros={others}")
+    rc.cmd("kill @e[type=item]")
+
+    # 5. Huevos desde un dispensador
+    for mob, z in (("scorpion", 30), ("emperor_scorpion", 40)):
+        rc.cmd(f"setblock 30 {Y} {z} dispenser[facing=up]{{Items:[{{Slot:0b,id:\"orespawn:{mob}_egg\",count:1}}]}}")
+        rc.cmd(f"setblock 31 {Y} {z} redstone_block")
+    time.sleep(2)
+    check("huevo de escorpión", count(rc, f"@e[type=orespawn:scorpion,x=30,y={Y},z=30,distance=..4]") >= 1)
+    check("huevo de emperador", count(rc, f"@e[type=orespawn:emperor_scorpion,x=30,y={Y},z=40,distance=..5]") >= 1)
+    rc.cmd("kill @e[type=!player]")
+    rc.cmd(f"fill 30 {Y} 30 31 {Y} 40 air")
+
+    # 6. Jaulas: una llena libera al escorpión y deja una jaula vacía
+    for mob, z in (("scorpion", -30), ("emperor_scorpion", -50)):
+        rc.cmd(f"summon orespawn:thrown_critter_cage 0 {Y + 6} {z} "
+               f"{{Item:{{id:\"orespawn:{mob}_cage\",count:1}},Motion:[0.0,-1.0,0.0]}}")
+    time.sleep(3)
+    check("jaula llena libera escorpión", count(rc, f"@e[type=orespawn:scorpion,x=0,y={Y},z=-30,distance=..4]") >= 1)
+    check("jaula llena libera emperador", count(rc, f"@e[type=orespawn:emperor_scorpion,x=0,y={Y},z=-50,distance=..6]") >= 1)
+    check("jaula vacía devuelta", count(rc, "@e[type=item,nbt={Item:{id:\"orespawn:empty_cage\"}}]") >= 2)
+    rc.cmd("kill @e[type=!player]")
+
+    #    y una vacía que golpea a un escorpión puede capturarlo (40 % por intento)
+    for i in range(12):
+        x = -60 + i * 4
+        rc.cmd(f"summon orespawn:scorpion {x} {Y} 50 {{NoAI:1b}}")
+        rc.cmd(f"summon orespawn:thrown_critter_cage {x} {Y + 4} 50 "
+               f"{{Item:{{id:\"orespawn:empty_cage\",count:1}},Motion:[0.0,-1.0,0.0]}}")
+    time.sleep(3)
+    caught = count(rc, "@e[type=item,nbt={Item:{id:\"orespawn:scorpion_cage\"}}]")
+    check("jaula vacía captura escorpión", caught >= 1, f"capturas={caught}/12")
+    rc.cmd("kill @e[type=!player]")
+
+    # 7. IA (informativo): el común caza una vaca; el emperador invoca escorpiones
+    rc.cmd(f"summon orespawn:scorpion 0 {Y} 0")
+    rc.cmd(f"summon minecraft:cow 2 {Y} 0 {{NoAI:1b,Tags:[\"prey\"]}}")
+    time.sleep(15)
+    hurt = rc.cmd("data get entity @e[tag=prey,limit=1] Health")
+    alive = count(rc, "@e[tag=prey]")
+    check("el común ataca a una vaca cercana", alive == 0 or (number(hurt) or 10) < 10, hurt, required=False)
+    rc.cmd("kill @e[type=!player]")
+    rc.cmd(f"summon orespawn:emperor_scorpion 0 {Y} 0")
+    rc.cmd(f"summon minecraft:villager 6 {Y} 0 {{NoAI:1b,Health:1000f,attributes:[{{id:\"minecraft:max_health\",base:1000d}}],Tags:[\"prey\"]}}")
+    time.sleep(30)
+    allies = count(rc, "@e[type=orespawn:scorpion]")
+    check("el emperador invoca escorpiones", allies >= 1, f"escorpiones={allies}", required=False)
+    poisoned = rc.cmd("data get entity @e[tag=prey,limit=1] active_effects")
+    check("el emperador puede envenenar", "poison" in poisoned, required=False)
+    rc.cmd("kill @e[type=!player]")
+
+    # 8. Escena para la prueba de cliente (capturas con Xvfb). El jugador aparece en 0,0 mirando al sur.
+    rc.cmd("time set noon")
+    rc.cmd("weather clear")
+    rc.cmd(f"setworldspawn 0 {Y} 0 0")
+    rc.cmd(f"summon orespawn:scorpion -1.5 {Y} 3.5 {{NoAI:1b,PersistenceRequired:1b,Rotation:[150f,0f],Tags:[\"scene\"]}}")
+    rc.cmd(f"summon orespawn:scorpion 2 {Y} 5 {{PersistenceRequired:1b,Tags:[\"scene\"]}}")
+    rc.cmd(f"summon orespawn:emperor_scorpion 0 {Y} 14 {{NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:[\"scene\"]}}")
+    time.sleep(2)
+    check("escena de cliente preparada", count(rc, "@e[tag=scene]") == 3)
+    rc.cmd("save-all flush")
+    time.sleep(3)
+    rc.cmd("stop")
+    failed = [n for n, ok, req in results if req and not ok]
+    print(f"\n{len(results) - len(failed)}/{len(results)} comprobaciones superadas")
+    if failed:
+        print("Fallos:", *failed, sep="\n - ")
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()

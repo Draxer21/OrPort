@@ -8,6 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -15,12 +16,48 @@ jobs:
           distribution: temurin
           java-version: '25'
       - uses: gradle/actions/setup-gradle@v4
+
       - name: Compilar
         run: |
           chmod +x gradlew
           ./gradlew build --stacktrace
+
       - name: Subir JAR
         uses: actions/upload-artifact@v4
         with:
           name: orespawn-jar
           path: build/libs/*.jar
+
+      - name: Prueba de servidor
+        run: |
+          mkdir -p run
+          echo "eula=true" > run/eula.txt
+          cp .github/smoke/server.properties run/server.properties
+          ./gradlew runServer --no-daemon > server.log 2>&1 &
+          for i in $(seq 1 120); do
+            grep -q "RCON running" server.log && break
+            sleep 5
+          done
+          set +e
+          python3 -I .github/smoke/server_test.py
+          status=$?
+          sleep 10
+          grep -nE "Exception|ERROR" server.log | grep -v "Couldn't connect" | head -80 || true
+          exit $status
+
+      - name: Prueba de cliente con capturas
+        if: always()
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq xvfb imagemagick xdotool mesa-utils libgl1-mesa-dri > /dev/null
+          bash .github/smoke/client_test.sh
+
+      - name: Subir registros y capturas
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pruebas
+          path: |
+            server.log
+            shots/
+            run/logs/

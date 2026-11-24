@@ -69,6 +69,7 @@ public final class Creatures {
     private static void add(String id, float width, float height, double health, double speed, double damage, boolean hostile, String egg) {
         var category = hostile ? MobCategory.MONSTER : MobCategory.CREATURE;
         EntityType.EntityFactory<Creature> factory=switch(id){
+            case "scorpion" -> Scorpion::new;
             case "emperor_scorpion" -> EmperorScorpion::new;
             case "basilisk" -> Basilisk::new;
             case "triffid" -> Triffid::new;
@@ -84,14 +85,20 @@ public final class Creatures {
         if (egg != null) OreSpawn.ITEMS.registerItem(egg, SpawnEggItem::new, p -> p.spawnEgg(type.get()));
     }
     private static void placements(net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent event) {
-        for (var data : SPECIES.values()) event.register(data.type.get(), SpawnPlacementTypes.ON_GROUND,
-            net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mob::checkMobSpawnRules,
-            net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        SPECIES.forEach((id, data) -> event.register(data.type.get(), SpawnPlacementTypes.ON_GROUND,
+            net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            switch (id) {
+                case "scorpion" -> Scorpion::canSpawn;
+                case "emperor_scorpion" -> Scorpion::canSpawnEmperor;
+                default -> Mob::checkMobSpawnRules;
+            },
+            net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent.Operation.REPLACE));
     }
     private static void attributes(EntityAttributeCreationEvent event) {
         SPECIES.forEach((id,data)->event.put(data.type.get(), Mob.createMobAttributes()
             .add(Attributes.MAX_HEALTH, data.health).add(Attributes.MOVEMENT_SPEED, data.speed)
             .add(Attributes.ARMOR, switch(id){case "trex" -> 14; case "hercules_beetle" -> 19; case "scorpion" -> 10; case "emperor_scorpion" -> 20; case "basilisk" -> 15; case "triffid" -> 12; case "mantis" -> 10; case "mothra" -> 8; default -> 0;})
+            .add(Attributes.FOLLOW_RANGE, switch(id){case "scorpion" -> 8; case "emperor_scorpion" -> 24; default -> 16;})
             .add(Attributes.TEMPT_RANGE, 10).add(Attributes.FLYING_SPEED, data.speed).add(Attributes.ATTACK_DAMAGE, data.damage).build()));
     }
     public static class Creature extends PathfinderMob {

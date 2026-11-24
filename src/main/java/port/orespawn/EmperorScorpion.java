@@ -19,8 +19,9 @@ final class EmperorScorpion extends Creatures.Creature {
     @Override protected void registerGoals() {
         goalSelector.addGoal(0, new FloatGoal(this));
         goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1));
-        targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
+        targetSelector.addGoal(1, new HurtByTargetGoal(this, Scorpion.class, EmperorScorpion.class));
+        targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 4, true, false,
+            (target, level) -> Scorpion.isPrey(target, true)));
     }
 
     @Override protected void customServerAiStep(ServerLevel level) {
@@ -46,7 +47,7 @@ final class EmperorScorpion extends Creatures.Creature {
             if (ally == null) return;
             double x = (getX() + target.getX()) / 2 + random.nextInt(5) - random.nextInt(5);
             double z = (getZ() + target.getZ()) / 2 + random.nextInt(5) - random.nextInt(5);
-            ally.snapTo(x, target.getY(), z, getYRot(), 0);
+            ally.snapTo(x, (getY() + target.getY()) / 2 + 1.01, z, getYRot(), 0);
             if (level.noCollision(ally) && level.addFreshEntity(ally)) ally.setTarget(target);
         }
     }
