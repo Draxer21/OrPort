@@ -38,7 +38,7 @@ cp client.log shots/client.log
 for n in 1 3 5; do
   [ -e "shots/escena_$n.png" ] && convert "shots/escena_$n.png" -crop 560x300+360+330 "shots/detalle_$n.png"
 done
-[ -e shots/escena_2.png ] && convert shots/escena_2.png -crop 480x300+560+260 shots/vaca_roja.png
+[ -e shots/escena_2.png ] && convert shots/escena_2.png -crop 520x360+600+240 shots/vaca_roja.png
 for f in shots/*.png; do
   [ -e "$f" ] || continue
   convert "$f" -resize 800x -quality 70 "/tmp/$(basename "$f" .png).jpg"

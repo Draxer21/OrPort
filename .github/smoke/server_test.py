@@ -229,7 +229,7 @@ def main():
     rc.cmd(f"setworldspawn 0 {Y} 0 0 0")
     rc.cmd(f"summon orespawn:scorpion -1 {Y} 3 {{NoAI:1b,PersistenceRequired:1b,Rotation:[150f,0f],Tags:[\"scene\"]}}")
     rc.cmd(f"summon orespawn:scorpion 2 {Y} 5 {{PersistenceRequired:1b,Tags:[\"scene\"]}}")
-    rc.cmd(f"summon orespawn:redcow -4 {Y} 7 {{NoAI:1b,PersistenceRequired:1b,Rotation:[120f,0f]}}")
+    rc.cmd(f"summon orespawn:redcow -3.5 {Y} 5 {{NoAI:1b,Invulnerable:1b,PersistenceRequired:1b,Rotation:[120f,0f]}}")
     rc.cmd(f"summon orespawn:emperor_scorpion 2 {Y} 12 {{NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:[\"scene\"]}}")
     time.sleep(2)
     check("escena de cliente preparada", count(rc, "@e[tag=scene]") == 3)
