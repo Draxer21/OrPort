@@ -50,8 +50,9 @@ final class Scorpion extends Creatures.Creature {
         if (!target.isAlive() || target instanceof Scorpion || target instanceof EmperorScorpion) return false;
         if (target instanceof Creatures.Creature creature && IGNORED.contains(creature.species())) return false;
         var type = target.getType();
-        if (emperor) return type != EntityType.ENDERMAN && type != EntityType.CREEPER;
-        if (type == EntityType.SPIDER || type == EntityType.CAVE_SPIDER || type == EntityType.CREEPER) return true;
+        String id = net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(type).toString();
+        if (emperor) return !id.equals("minecraft:enderman") && !id.equals("minecraft:creeper");
+        if (id.equals("minecraft:spider") || id.equals("minecraft:cave_spider") || id.equals("minecraft:creeper")) return true;
         return !(target instanceof Monster) && type.getCategory() != MobCategory.MONSTER;
     }
 
