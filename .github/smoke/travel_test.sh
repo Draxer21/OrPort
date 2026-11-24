@@ -45,15 +45,21 @@ if [ $joined = 1 ]; then
   viaje arcoiris_ida    minecraft:overworld 20.5 -60 orespawn:villages
   viaje arcoiris_vuelta orespawn:villages   20.5 151 minecraft:overworld
   viaje inestable_ida   minecraft:overworld 30.5 -60 orespawn:danger
-  sleep 5
-  import -window root "shots/danger_paisaje.png"
   viaje inestable_vuelta orespawn:danger    20.5 -56 minecraft:overworld
+  # Vistas de las dos dimensiones en modo espectador.
+  comando "/gamemode spectator"
+  comando "/execute in orespawn:villages run tp @s 16 140 -40 0 25"
+  sleep 12
+  import -window root "shots/villages_paisaje.png"
+  comando "/execute in orespawn:danger run tp @s 40 -50 -40 0 10"
+  sleep 12
+  import -window root "shots/danger_paisaje.png"
 else
   echo "[FALLO] el cliente no entró al mundo"; fallos=1
 fi
 grep -E "viajó a|at port\.orespawn|Exception.*orespawn" client_viajes.log | head -20
 pkill -f runClient; kill $pid 2>/dev/null; sleep 5; pkill -f java || true
-for f in shots/*_antes.png shots/*_despues.png shots/danger_paisaje.png; do
+for f in shots/*_antes.png shots/*_despues.png shots/*_paisaje.png; do
   [ -e "$f" ] || continue
   convert "$f" -resize 800x -quality 70 "/tmp/$(basename "$f" .png).jpg"
   echo "IMG $(basename "$f" .png) $(base64 -w0 "/tmp/$(basename "$f" .png).jpg")"

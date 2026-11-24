@@ -198,7 +198,7 @@ def main():
     grass = rc.cmd("execute in orespawn:danger if block 5 -57 5 minecraft:grass_block")
     bedrock = rc.cmd("execute in orespawn:danger if block 5 -64 5 minecraft:bedrock")
     check("Danger Dimension: capas del clásico", "passed" in grass and "passed" in bedrock, f"{grass} / {bedrock}")
-    logs = rc.cmd("execute in orespawn:danger run fill -16 -56 -16 15 -36 15 minecraft:oak_log replace minecraft:oak_log")
+    logs = rc.cmd("execute in orespawn:danger run fill -16 -56 -16 15 -36 15 minecraft:stone replace minecraft:oak_log")
     check("Danger Dimension: árboles retorcidos", "successfully" in logs.lower(), logs)
     placed = rc.cmd("execute in orespawn:danger run place feature orespawn:scraggly_tree 8 -56 8")
     check("árbol retorcido con /place feature", "placed" in placed.lower() and "fail" not in placed.lower(), placed)
