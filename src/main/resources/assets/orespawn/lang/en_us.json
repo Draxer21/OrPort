@@ -282,5 +282,6 @@
   "item.orespawn.emperor_scorpion_egg": "Emperor Scorpion Spawn Egg",
   "block.orespawn.emperor_scorpion_ore": "Emperor Scorpion Fossil",
   "item.orespawn.scorpion_cage": "Caged Scorpion",
-  "item.orespawn.emperor_scorpion_cage": "Caged Emperor Scorpion"
+  "item.orespawn.emperor_scorpion_cage": "Caged Emperor Scorpion",
+  "entity.orespawn.thrown_critter_cage": "Thrown Critter Cage"
 }

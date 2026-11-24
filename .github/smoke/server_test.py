@@ -54,7 +54,7 @@ def check(name, ok, detail="", required=True):
 
 def count(rc, selector):
     reply = rc.cmd(f"execute if entity {selector}")
-    m = re.search(r"count: (\d+)", reply)
+    m = re.search(r"count: (\d+)", reply, re.I)
     return int(m.group(1)) if m else 0
 
 
@@ -166,7 +166,7 @@ def main():
     # 8. Escena para la prueba de cliente (capturas con Xvfb). El jugador aparece en 0,0 mirando al sur.
     rc.cmd("time set noon")
     rc.cmd("weather clear")
-    rc.cmd(f"setworldspawn 0 {Y} 0 0")
+    rc.cmd(f"setworldspawn 0 {Y} 0 0 0")
     rc.cmd(f"summon orespawn:scorpion -1.5 {Y} 3.5 {{NoAI:1b,PersistenceRequired:1b,Rotation:[150f,0f],Tags:[\"scene\"]}}")
     rc.cmd(f"summon orespawn:scorpion 2 {Y} 5 {{PersistenceRequired:1b,Tags:[\"scene\"]}}")
     rc.cmd(f"summon orespawn:emperor_scorpion 0 {Y} 14 {{NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:[\"scene\"]}}")
