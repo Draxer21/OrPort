@@ -30,6 +30,12 @@ sleep 5
 pkill -f java || true
 grep -nE "Exception|ERROR|orespawn.*(WARN|ERROR)" client.log | grep -viE "realms|telemetry|narrator|openal|sound|Couldn't connect" | head -60 > shots/errores_cliente.txt || true
 cp client.log shots/client.log
+# Las capturas también van al registro en base64 para poder revisarlas sin descargar artefactos.
+for f in shots/*.png; do
+  [ -e "$f" ] || continue
+  convert "$f" -resize 800x -quality 70 "/tmp/$(basename "$f" .png).jpg"
+  echo "IMG $(basename "$f" .png) $(base64 -w0 "/tmp/$(basename "$f" .png).jpg")"
+done
 if [ $joined != 1 ]; then echo "El cliente no llegó a entrar al mundo"; tail -80 client.log; exit 1; fi
 if grep -qE "Exception.*orespawn|at port\.orespawn" client.log; then echo "Excepciones del mod en el cliente"; grep -nE -A5 "at port\.orespawn" client.log | head -60; exit 1; fi
 echo "Capturas tomadas"
