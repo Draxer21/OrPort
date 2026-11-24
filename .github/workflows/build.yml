@@ -34,7 +34,7 @@ jobs:
         run: |
           jar=$(find ~/.gradle build -name "*.jar" -size +5M 2>/dev/null | while read j; do unzip -l "$j" 2>/dev/null | grep -q "data/minecraft/worldgen/noise_settings/overworld.json" && echo "$j" && break; done | head -1)
           echo "JAR VANILLA: $jar"
-          [ -n "$jar" ] && echo "NOISE $(unzip -p "$jar" data/minecraft/worldgen/noise_settings/overworld.json | base64 -w0)"
+          if [ -n "$jar" ]; then unzip -p "$jar" data/minecraft/worldgen/noise_settings/overworld.json | base64 -w0 | fold -w 60000 | sed 's/^/NOISEPART /'; echo; fi
 
       - name: Subir JAR
         uses: actions/upload-artifact@v4
