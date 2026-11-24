@@ -22,6 +22,8 @@ public final class ClientModels {
         bind(event,"cryolophosaurus",Shapes::ModelCryolophosaurus, root -> new CryolophosaurusPose(root,1.5F,0.55f),0.55f);
         bind(event,"cavefisher",Shapes::ModelCaveFisher, root -> new CaveFisherPose(root,1.0F,1f),1f);
         bind(event,"red_ant",Shapes::ModelAnt, root -> new AntModel(root),0.4f);
+        bind(event,"rainbow_ant",Shapes::ModelAnt, root -> new AntModel(root),0.4f);
+        bind(event,"unstable_ant",Shapes::ModelAnt, root -> new AntModel(root),0.4f);
         bind(event,"bird",Shapes::ModelBird, root -> new BirdPose(root,0.6F,1f),1f);
         bind(event,"butterfly",Shapes::ModelButterfly, root -> new ButterflyPose(root,0.6F,1f),1f);
         bind(event,"gammametroid",Shapes::ModelGammaMetroid, root -> new GammaMetroidPose(root,1.0F,1f),1f);
@@ -62,6 +64,8 @@ public final class ClientModels {
             case "cryolophosaurus" -> new String[]{"cryolophosaurus.png"};
             case "cavefisher" -> new String[]{"cavefisher.png"};
             case "red_ant" -> new String[]{"red_ant.png"};
+            case "rainbow_ant" -> new String[]{"rainbow_ant.png"};
+            case "unstable_ant" -> new String[]{"unstable_ant.png"};
             case "bird" -> new String[]{"bird1.png", "bird2.png", "bird3.png", "bird4.png", "bird5.png", "bird6.png"};
             case "butterfly" -> new String[]{"butterfly.png", "butterfly2.png", "butterfly3.png", "butterfly4.png"};
             case "gammametroid" -> new String[]{"gammametroid.png"};

@@ -170,7 +170,61 @@ def main():
     check("el emperador puede envenenar", "poison" in poisoned, required=False)
     rc.cmd("kill @e[type=!player]")
 
-    # 8. Escena para la prueba de cliente (capturas con Xvfb). El jugador aparece en 0,0 mirando al sur.
+    # 8. Hormigas arcoíris e inestable, sus nidos y sus dimensiones
+    for mob in ("rainbow_ant", "unstable_ant"):
+        rc.cmd(f"summon orespawn:{mob} 0 {Y} -10 {{NoAI:1b,Tags:[\"ant\"]}}")
+        got = number(rc.cmd(f"attribute @e[type=orespawn:{mob},limit=1] minecraft:max_health get"))
+        check(f"/summon orespawn:{mob} (vida 1)", got == 1, f"vida={got}")
+    rc.cmd("kill @e[tag=ant]")
+    for item in ("rainbow_ant_egg", "unstable_ant_egg", "rainbow_ant_block", "unstable_ant_block"):
+        reply = rc.cmd(f"summon item 0 {Y} -20 {{Item:{{id:\"orespawn:{item}\",count:1}},Tags:[\"probe\"]}}")
+        check(f"objeto orespawn:{item}", "Summoned" in reply, reply)
+    rc.cmd("kill @e[tag=probe]")
+    for rule in ("random_tick_speed 4096", "randomTickSpeed 4096"):
+        rc.cmd(f"gamerule {rule}")
+    for mob, x in (("rainbow_ant", -30), ("unstable_ant", -20)):
+        rc.cmd(f"setblock {x} {Y - 1} -60 orespawn:{mob}_block")
+    time.sleep(3)
+    for rule in ("random_tick_speed 3", "randomTickSpeed 3"):
+        rc.cmd(f"gamerule {rule}")
+    for mob, x in (("rainbow_ant", -30), ("unstable_ant", -20)):
+        n = count(rc, f"@e[type=orespawn:{mob},x={x},y={Y},z=-60,distance=..12]")
+        check(f"hormiguero de {mob} genera hormigas", n >= 1, f"hormigas={n}")
+    rc.cmd("kill @e[type=!player]")
+
+    #    Danger Dimension: plano de lecho de roca, tierra y césped con árboles retorcidos
+    rc.cmd("execute in orespawn:danger run forceload add -32 -32 31 31")
+    time.sleep(5)
+    grass = rc.cmd("execute in orespawn:danger if block 5 -57 5 minecraft:grass_block")
+    bedrock = rc.cmd("execute in orespawn:danger if block 5 -64 5 minecraft:bedrock")
+    check("Danger Dimension: capas del clásico", "passed" in grass and "passed" in bedrock, f"{grass} / {bedrock}")
+    logs = rc.cmd("execute in orespawn:danger run fill -32 -56 -32 31 -36 31 minecraft:oak_log replace minecraft:oak_log")
+    m = re.search(r"(\d+)", logs)
+    check("Danger Dimension: árboles retorcidos", m is not None and "filled" in logs.lower(), logs)
+    #    Villages: terreno normal y aldeas cada pocos chunks
+    found = rc.cmd("execute in orespawn:villages run locate structure orespawn:village")
+    m = re.search(r"\((\d+) blocks? away\)", found)
+    check("Villages: aldea cercana", m is not None and int(m.group(1)) < 400, found)
+    biome = rc.cmd("execute in orespawn:villages run locate biome orespawn:villages")
+    check("Villages: bioma propio", "orespawn:villages" in biome and "nearest" in biome.lower(), biome)
+
+    #    Escenarios de viaje para el cliente: hormiga quieta a 1,5 bloques al sur del jugador.
+    rc.cmd(f"fill 15 {Y} 15 35 {Y + 4} 25 air")
+    rc.cmd(f"summon orespawn:rainbow_ant 20.5 {Y} 21.5 {{NoAI:1b,PersistenceRequired:1b,Tags:[\"trip\"]}}")
+    rc.cmd(f"summon orespawn:unstable_ant 30.5 {Y} 21.5 {{NoAI:1b,PersistenceRequired:1b,Tags:[\"trip\"]}}")
+    rc.cmd("execute in orespawn:villages run forceload add 0 0 47 47")
+    rc.cmd("execute in orespawn:villages run fill 15 150 15 25 150 25 minecraft:stone")
+    rc.cmd("execute in orespawn:villages run fill 15 151 15 25 155 25 minecraft:air")
+    rc.cmd("execute in orespawn:villages run summon orespawn:rainbow_ant 20.5 151 21.5 {NoAI:1b,PersistenceRequired:1b,Tags:[\"trip\"]}")
+    rc.cmd("execute in orespawn:danger run fill 15 -56 15 25 -40 25 minecraft:air")
+    rc.cmd("execute in orespawn:danger run summon orespawn:unstable_ant 20.5 -56 21.5 {NoAI:1b,PersistenceRequired:1b,Tags:[\"trip\"]}")
+    time.sleep(2)
+    trips = sum(count(rc, f"@e[tag=trip]") for _ in [0])
+    trips += int(re.search(r"(\d+)", rc.cmd("execute in orespawn:villages if entity @e[tag=trip]") + " 0").group(1))
+    trips += int(re.search(r"(\d+)", rc.cmd("execute in orespawn:danger if entity @e[tag=trip]") + " 0").group(1))
+    check("escenarios de viaje preparados", trips == 4, f"hormigas={trips}")
+
+    # 9. Escena para la prueba de cliente (capturas con Xvfb). El jugador aparece en 0,0 mirando al sur.
     rc.cmd("time set noon")
     rc.cmd("weather clear")
     rc.cmd(f"setworldspawn 0 {Y} 0 0 0")

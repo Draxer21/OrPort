@@ -60,6 +60,10 @@ jobs:
           sudo apt-get install -y -qq xvfb imagemagick xdotool mesa-utils libgl1-mesa-dri > /dev/null
           bash .github/smoke/client_test.sh
 
+      - name: Prueba de viajes con hormigas
+        if: always()
+        run: bash .github/smoke/travel_test.sh
+
       - name: Subir registros y capturas
         if: always()
         uses: actions/upload-artifact@v4

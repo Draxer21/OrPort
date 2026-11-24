@@ -22,6 +22,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 
 final class RedAnt extends Creatures.Creature {
+    private static final org.slf4j.Logger LOGGER = com.mojang.logging.LogUtils.getLogger();
     static final ResourceKey<Level> MINING = ResourceKey.create(Registries.DIMENSION, Identifier.fromNamespaceAndPath("orespawn","mining"));
     RedAnt(EntityType<? extends PathfinderMob> type, Level level) { super(type,level); }
 
@@ -41,15 +42,26 @@ final class RedAnt extends Creatures.Creature {
     @Override protected InteractionResult mobInteract(Player player, InteractionHand hand) {
         if (hand!=InteractionHand.MAIN_HAND || !player.getItemInHand(hand).isEmpty()) return super.mobInteract(player,hand);
         if (!(player instanceof ServerPlayer traveler)) return InteractionResult.SUCCESS;
+        var from=traveler.level().dimension();
+        if (!from.equals(MINING) && !from.equals(Level.OVERWORLD)) return InteractionResult.PASS;
+        return travel(traveler,MINING,"red_ant");
+    }
+
+    /**
+     * Viaje de las hormigas del clásico: dentro de {@code away} se vuelve al mundo principal; desde
+     * cualquier otro lugar se va a {@code away}. Si no hay una hormiga de vuelta cerca de la llegada,
+     * aparece una para que el jugador pueda regresar.
+     */
+    static InteractionResult travel(ServerPlayer traveler,ResourceKey<Level> away,String antSpecies) {
         var from=traveler.level();
-        if (!from.dimension().equals(MINING) && !from.dimension().equals(Level.OVERWORLD)) return InteractionResult.PASS;
-        var dest=from.getServer().getLevel(from.dimension().equals(MINING)?Level.OVERWORLD:MINING);
+        var dest=from.getServer().getLevel(from.dimension().equals(away)?Level.OVERWORLD:away);
         if (dest==null) return explain(traveler,"dimension");
         var origin=dest.getWorldBorder().clampToBounds(traveler.blockPosition());
         var pos=landing(dest,origin);
         if (pos==null) return explain(traveler,"terrain");
-        if (dest.dimension().equals(MINING) && dest.getEntitiesOfClass(RedAnt.class,new AABB(pos).inflate(6),Entity::isAlive).isEmpty()) {
-            var ant=Creatures.SPECIES.get("red_ant").type().get().create(dest,EntitySpawnReason.TRIGGERED);
+        var antType=Creatures.SPECIES.get(antSpecies).type().get();
+        if (dest.dimension().equals(away) && dest.getEntitiesOfClass(Creatures.Creature.class,new AABB(pos).inflate(6),e->e.isAlive() && e.getType()==antType).isEmpty()) {
+            var ant=antType.create(dest,EntitySpawnReason.TRIGGERED);
             if(ant==null)return explain(traveler,"travel");
             ant.snapTo(pos.getX()+.5,pos.getY(),pos.getZ()+.5,0,0);
             ant.setPersistenceRequired();
@@ -57,6 +69,7 @@ final class RedAnt extends Creatures.Creature {
         }
         if (!traveler.teleportTo(dest,pos.getX()+0.5,pos.getY(),pos.getZ()+0.5,Set.of(),traveler.getYRot(),traveler.getXRot(),true)) return explain(traveler,"travel");
         traveler.resetFallDistance();
+        LOGGER.info("{} viajó a {} con {}", traveler.getName().getString(), dest.dimension().identifier(), antSpecies);
         return InteractionResult.SUCCESS;
     }
 

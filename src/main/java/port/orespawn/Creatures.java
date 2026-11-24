@@ -32,6 +32,8 @@ public final class Creatures {
         add("cryolophosaurus", 0.75f, 0.75f, 45, 0.25, 8.0, true, "cryolophosaurus_egg");
         add("cavefisher", 1.35f, 0.75f, 20, 0.2, 4.0, true, "cavefisher_egg");
         add("red_ant", 0.2f, 0.2f, 2, 0.2, 1.0, false, "red_ant_egg");
+        add("rainbow_ant", 0.1f, 0.1f, 1, 0.15, 0, false, "rainbow_ant_egg");
+        add("unstable_ant", 0.1f, 0.1f, 1, 0.15, 0, false, "unstable_ant_egg");
         add("bird", 0.4f, 0.4f, 2, 0.1, 2, false, "bird_egg");
         add("butterfly", 0.4f, 0.4f, 1, 0.1, 2, false, "butterfly_egg");
         add("gammametroid", 1.5f, 1.5f, 100, 0.15, 10.0, true, "gammametroid_egg");
@@ -75,6 +77,7 @@ public final class Creatures {
             case "triffid" -> Triffid::new;
             case "mantis" -> Mantis::new;
             case "red_ant" -> RedAnt::new;
+            case "rainbow_ant", "unstable_ant" -> TravelAnt::new;
             case "doom_worm" -> DoomWorm::new;
             case "redcow","baryonyx" -> BreedingCreature::new;
             default -> Companion.supports(id)?Companion::new:Creature::new;

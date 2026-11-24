@@ -24,6 +24,7 @@ final class Landscape {
     static void register(IEventBus bus) {
         var features = DeferredRegister.<Feature<?>>create(Registries.FEATURE, "orespawn");
         features.register("mining_dungeon", () -> new Dungeon());
+        features.register("scraggly_tree", () -> new ScragglyTree());
         features.register(bus);
         for (String name : new String[]{"corn","butterfly","mosquito","firefly","moth"}) {
             var crop = OreSpawn.BLOCKS.registerBlock(name+"_plant", p -> new Plant(p, name), p -> p.noCollision().noOcclusion().randomTicks().instabreak().sound(SoundType.CROP));
@@ -82,6 +83,56 @@ final class Landscape {
                 chest.setLootTableSeed(random.nextLong());
             }
             return true;
+        }
+    }
+
+    /**
+     * ScragglyTreeWithBranches de ChunkProviderOreSpawn4: tronco corto que sigue subiendo en pasos
+     * torcidos, ramas al azar y hojas sueltas alrededor de cada tramo.
+     */
+    private static final class ScragglyTree extends Feature<NoneFeatureConfiguration> {
+        ScragglyTree() { super(NoneFeatureConfiguration.CODEC); }
+        private static final BlockState LOG = Blocks.OAK_LOG.defaultBlockState();
+        private static final BlockState LEAVES = Blocks.OAK_LEAVES.defaultBlockState().setValue(LeavesBlock.PERSISTENT, true);
+
+        @Override public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
+            var level = context.level(); var random = context.random(); var origin = context.origin();
+            if (!level.getBlockState(origin.below()).is(Blocks.GRASS_BLOCK)) return false;
+            int trunk = 1 + random.nextInt(3), top = trunk + random.nextInt(12);
+            for (int i = 1; i < trunk; i++) if (!open(level, origin.above(i))) return false;
+            for (int i = 0; i < trunk; i++) level.setBlock(origin.above(i), LOG, 2);
+            var pos = origin.above(trunk - 1);
+            for (int i = trunk; i < top; i++) {
+                pos = pos.offset(random.nextInt(2) - random.nextInt(2), random.nextInt(4) > 0 ? 1 : 0, random.nextInt(2) - random.nextInt(2));
+                if (!open(level, pos)) break;
+                level.setBlock(pos, LOG, 2);
+                if (random.nextInt(4) == 1) branch(level, random, pos, random.nextInt(1 + top - i),
+                    random.nextInt(2) - random.nextInt(2), random.nextInt(2) - random.nextInt(2));
+                leaves(level, random, pos);
+            }
+            return true;
+        }
+
+        private static void branch(WorldGenLevel level, RandomSource random, BlockPos pos, int length, int dx, int dz) {
+            for (int i = 0; i < length; i++) {
+                int x = Math.clamp(random.nextInt(2) - random.nextInt(2) + dx, -1, 1);
+                int z = Math.clamp(random.nextInt(2) - random.nextInt(2) + dz, -1, 1);
+                pos = pos.offset(x, random.nextInt(3) > 0 ? 1 : 0, z);
+                if (!open(level, pos)) return;
+                level.setBlock(pos, LOG, 2);
+                leaves(level, random, pos);
+            }
+        }
+
+        private static void leaves(WorldGenLevel level, RandomSource random, BlockPos pos) {
+            for (int x = -1; x < 2; x++) for (int z = -1; z < 2; z++)
+                if (random.nextInt(2) == 1 && level.isEmptyBlock(pos.offset(x, 0, z))) level.setBlock(pos.offset(x, 0, z), LEAVES, 2);
+            if (random.nextInt(2) == 1 && level.isEmptyBlock(pos.above())) level.setBlock(pos.above(), LEAVES, 2);
+        }
+
+        private static boolean open(WorldGenLevel level, BlockPos pos) {
+            var state = level.getBlockState(pos);
+            return state.isAir() || state.is(Blocks.OAK_LOG) || state.is(Blocks.OAK_LEAVES);
         }
     }
 }
