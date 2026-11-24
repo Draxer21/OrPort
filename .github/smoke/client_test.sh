@@ -9,11 +9,13 @@ export DISPLAY=:99 LIBGL_ALWAYS_SOFTWARE=1
 ./gradlew runClient -PquickPlay=smoke --no-daemon > client.log 2>&1 &
 pid=$!
 joined=0
-for i in $(seq 1 120); do
+for i in $(seq 1 90); do
   if grep -qE "joined the game|logged in with entity id" client.log; then joined=1; break; fi
   if ! kill -0 $pid 2>/dev/null; then break; fi
   # Captura de diagnóstico cada minuto mientras carga.
   if [ $((i % 12)) = 0 ]; then import -window root "shots/carga_$((i / 12)).png" 2>/dev/null || true; fi
+  # Aviso de ajustes experimentales (dimensión del mod): botón "I Know What I'm Doing!".
+  if [ $((i % 6)) = 0 ] && [ $i -ge 12 ]; then xdotool mousemove 798 429 click 1 2>/dev/null || true; fi
   sleep 5
 done
 if [ $joined = 1 ]; then
