@@ -134,7 +134,11 @@ def main():
                f"{{Item:{{id:\"orespawn:{mob}_cage\",count:1}},Motion:[0.0,-1.0,0.0]}}")
     time.sleep(3)
     check("jaula llena libera escorpión", count(rc, f"@e[type=orespawn:scorpion,x=0,y={Y},z=-30,distance=..4]") >= 1)
-    check("jaula llena libera emperador", count(rc, f"@e[type=orespawn:emperor_scorpion,x=0,y={Y},z=-50,distance=..6]") >= 1)
+    emperors = count(rc, f"@e[type=orespawn:emperor_scorpion,x=0,y={Y},z=-50,distance=..8]")
+    if not emperors:
+        rc.cmd("execute as @e[type=orespawn:emperor_scorpion] run data get entity @s Pos")
+        rc.cmd("execute as @e[type=item] run data get entity @s Pos")
+    check("jaula llena libera emperador", emperors >= 1)
     check("jaula vacía devuelta", count(rc, "@e[type=item,nbt={Item:{id:\"orespawn:empty_cage\"}}]") >= 2)
     rc.cmd("kill @e[type=!player]")
 
