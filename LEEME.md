@@ -105,3 +105,4 @@ Adaptaciones provisionales:
 - **Criaturas pendientes.** Las criaturas propias de estas dimensiones aún no están portadas: robots, Godzilla y vacas doradas en Villages; Creeping Horror, Terrible Terror, Ender Reaper, Cliff Racer y otras en la Danger Dimension. Por eso Villages no tiene monstruos y la Danger Dimension todavía no es peligrosa.
 - **Hojas de manzano.** Los árboles retorcidos usan hojas de roble persistentes en lugar de las hojas de manzano.
 - **Mascotas.** El clásico llevaba consigo las mascotas que no estaban sentadas; el port todavía no lo hace.
+- **Vaca roja.** Se dibuja con el modelo de vaca de 1.7.10 que usaba el clásico. El modelo de vaca actual tiene otra disposición de textura y deformaba `red_cow.png`.
