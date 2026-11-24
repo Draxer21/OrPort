@@ -1072,8 +1072,26 @@ final class Shapes {
         root.addOrReplaceChild("gobbler", CubeListBuilder.create().texOffs(38, 10).addBox(-0.5F, -1.0F, -2.5F, 1, 5, 1), PartPose.offsetAndRotation(0.0F, 8.0F, -3.0F, 0.0F, 0.0F, 0.0F));
         return LayerDefinition.create(mesh, 64, 32).bakeRoot();
     }
+    /**
+     * ModelCow de Minecraft 1.7.10, que es el que usaba RenderEnchantedCow para la vaca roja. Las
+     * texturas del clásico (64x32) siguen la disposición antigua; el CowModel actual usa otra.
+     */
     static ModelPart ModelCow() {
-        return net.minecraft.client.model.animal.cow.CowModel.createBodyLayer().bakeRoot();
+        var mesh = new MeshDefinition();
+        var root = mesh.getRoot();
+        root.addOrReplaceChild("head", CubeListBuilder.create()
+            .texOffs(0, 0).addBox(-4F, -4F, -6F, 8, 8, 6)
+            .texOffs(22, 0).addBox(-5F, -5F, -4F, 1, 3, 1)
+            .texOffs(22, 0).addBox(4F, -5F, -4F, 1, 3, 1), PartPose.offset(0F, 4F, -8F));
+        root.addOrReplaceChild("body", CubeListBuilder.create()
+            .texOffs(18, 4).addBox(-6F, -10F, -7F, 12, 18, 10)
+            .texOffs(52, 0).addBox(-2F, 2F, -8F, 4, 6, 1), PartPose.offsetAndRotation(0F, 5F, 2F, (float) (Math.PI / 2), 0F, 0F));
+        var leg = CubeListBuilder.create().texOffs(0, 16).addBox(-2F, 0F, -2F, 4, 12, 4);
+        root.addOrReplaceChild("right_hind_leg", leg, PartPose.offset(-4F, 12F, 7F));
+        root.addOrReplaceChild("left_hind_leg", leg, PartPose.offset(4F, 12F, 7F));
+        root.addOrReplaceChild("right_front_leg", leg, PartPose.offset(-4F, 12F, -6F));
+        root.addOrReplaceChild("left_front_leg", leg, PartPose.offset(4F, 12F, -6F));
+        return LayerDefinition.create(mesh, 64, 32).bakeRoot();
     }
     static ModelPart ModelStinkBug() {
         var mesh = new MeshDefinition();
