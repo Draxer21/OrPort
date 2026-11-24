@@ -90,9 +90,17 @@ public final class Creatures {
             switch (id) {
                 case "scorpion" -> Scorpion::canSpawn;
                 case "emperor_scorpion" -> Scorpion::canSpawnEmperor;
+                case "mantis" -> Creatures::canSpawnMantis;
                 default -> Mob::checkMobSpawnRules;
             },
             net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent.Operation.REPLACE));
+    }
+    /** Mantis.getCanSpawnHere del clásico: altura 50 o más y ninguna otra mantis en 32 bloques. */
+    private static boolean canSpawnMantis(EntityType<Creature> type, net.minecraft.world.level.ServerLevelAccessor level,
+            EntitySpawnReason reason, net.minecraft.core.BlockPos pos, net.minecraft.util.RandomSource random) {
+        if (!Mob.checkMobSpawnRules(type, level, reason, pos, random)) return false;
+        if (reason == EntitySpawnReason.SPAWNER) return true;
+        return pos.getY() >= 50 && level.getEntitiesOfClass(Mantis.class, new net.minecraft.world.phys.AABB(pos).inflate(32, 16, 32)).isEmpty();
     }
     private static void attributes(EntityAttributeCreationEvent event) {
         SPECIES.forEach((id,data)->event.put(data.type.get(), Mob.createMobAttributes()

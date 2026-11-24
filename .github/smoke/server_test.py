@@ -65,6 +65,9 @@ def number(reply):
 
 def main():
     rc = Rcon()
+    # Sin aparición natural ni radio aleatorio de aparición (nombres de 26.x y anteriores).
+    for rule in ("spawn_mobs false", "doMobSpawning false", "respawn_radius 0", "spawn_radius 0", "spawnRadius 0"):
+        rc.cmd(f"gamerule {rule}")
     rc.cmd("forceload add -64 -64 64 64")
     rc.cmd("kill @e[type=!player]")
     time.sleep(1)
@@ -167,9 +170,9 @@ def main():
     rc.cmd("time set noon")
     rc.cmd("weather clear")
     rc.cmd(f"setworldspawn 0 {Y} 0 0 0")
-    rc.cmd(f"summon orespawn:scorpion -1.5 {Y} 3.5 {{NoAI:1b,PersistenceRequired:1b,Rotation:[150f,0f],Tags:[\"scene\"]}}")
+    rc.cmd(f"summon orespawn:scorpion -1 {Y} 3 {{NoAI:1b,PersistenceRequired:1b,Rotation:[150f,0f],Tags:[\"scene\"]}}")
     rc.cmd(f"summon orespawn:scorpion 2 {Y} 5 {{PersistenceRequired:1b,Tags:[\"scene\"]}}")
-    rc.cmd(f"summon orespawn:emperor_scorpion 0 {Y} 14 {{NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:[\"scene\"]}}")
+    rc.cmd(f"summon orespawn:emperor_scorpion 2 {Y} 12 {{NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:[\"scene\"]}}")
     time.sleep(2)
     check("escena de cliente preparada", count(rc, "@e[tag=scene]") == 3)
     rc.cmd("save-all flush")
