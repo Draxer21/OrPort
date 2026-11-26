@@ -1,0 +1,49 @@
+name: Generación natural de hormigueros
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  hormigueros:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Generar terreno y verificar los dos nidos
+        run: |
+          set -euo pipefail
+          python3 -m venv "$RUNNER_TEMP/nest-venv"
+          "$RUNNER_TEMP/nest-venv/bin/pip" install nbtlib==2.0.4
+          mkdir -p run
+          test ! -e run/natural-nests
+          echo "eula=true" > run/eula.txt
+          sed -e '/^level-type=/d' -e '/^level-name=/d' .github/smoke/server.properties > run/server.properties
+          cat >> run/server.properties <<'EOF'
+          level-name=natural-nests
+          level-seed=26020306
+          region-file-compression=deflate
+          server-ip=127.0.0.1
+          EOF
+          bash gradlew runServer --no-daemon > natural-nests.log 2>&1 &
+          server=$!
+          trap 'kill "$server" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 180); do
+            grep -q 'RCON running' natural-nests.log && break
+            kill -0 "$server" || { tail -60 natural-nests.log; exit 1; }
+            sleep 5
+          done
+          grep -q 'RCON running' natural-nests.log
+          "$RUNNER_TEMP/nest-venv/bin/python" .github/smoke/natural_nests.py | tee nest-results.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: generacion-hormigueros
+          path: |
+            natural-nests.log
+            nest-results.log
