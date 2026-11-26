@@ -66,6 +66,7 @@ final class RedAnt extends Creatures.Creature {
             ant.snapTo(pos.getX()+.5,pos.getY(),pos.getZ()+.5,0,0);
             ant.setPersistenceRequired();
             if(!dest.addFreshEntity(ant))return explain(traveler,"travel");
+            LOGGER.info("Hormiga de vuelta {} en {} {}", antSpecies, dest.dimension().identifier(), pos.toShortString());
         }
         if (!traveler.teleportTo(dest,pos.getX()+0.5,pos.getY(),pos.getZ()+0.5,Set.of(),traveler.getYRot(),traveler.getXRot(),true)) return explain(traveler,"travel");
         traveler.resetFallDistance();

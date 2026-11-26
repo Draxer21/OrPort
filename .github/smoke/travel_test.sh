@@ -89,7 +89,9 @@ viaje() {
   apuntar $ant
   clic "$dim" "${tag}_ida"; check "$tag: ida a $dim con una hormiga del hormiguero" $([ $? = 0 ] && echo 1 || echo 0)
   sleep 4
-  local vuelta=$(cuenta "@e[type=orespawn:$ant,distance=..6]")
+  # En el destino no había ninguna hormiga de esta especie; la de vuelta pudo alejarse mientras cargaba.
+  grep -o "Hormiga de vuelta $ant en $dim.*" $LOG | tail -1
+  local vuelta=$(cuenta "@e[type=orespawn:$ant,distance=..48]")
   check "$tag: aparece una hormiga de vuelta al llegar" $([ "$vuelta" -ge 1 ] && echo 1 || echo 0) "hormigas=$vuelta"
   [ "$vuelta" -ge 1 ] || return
   import -window root "shots/${tag}_llegada.png"
