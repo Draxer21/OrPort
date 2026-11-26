@@ -37,11 +37,12 @@ cuenta() {
 }
 fallos=0
 check() { if [ "$2" = 1 ]; then echo "[OK ] $1 ${3:-}"; else echo "[FALLO] $1 ${3:-}"; fallos=$((fallos + 1)); fi; }
-# Inmoviliza la hormiga más cercana de la especie y coloca al jugador 1,5 bloques al norte mirándola.
+# Inmoviliza la hormiga más cercana de la especie, la pone 1,5 bloques al sur del jugador y orienta la cámara hacia ella.
 apuntar() {
   local sel="@e[type=orespawn:$1,sort=nearest,limit=1]"
   comando "/data merge entity $sel {NoAI:1b}"
-  comando "/execute at $sel run tp @s ~ ~ ~-1.5 facing entity $sel eyes"
+  comando "/execute at @s run tp $sel ~ ~ ~1.5"
+  comando "/tp @s ~ ~ ~ 0 46.3"
   sleep 3
 }
 clic() {
