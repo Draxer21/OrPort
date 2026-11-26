@@ -39,6 +39,9 @@ final class RedAnt extends Creatures.Creature {
     @Override public boolean doHurtTarget(ServerLevel level, Entity entity) {
         return level.getDifficulty()!=Difficulty.PEACEFUL && getRandom().nextInt(15)==0 && super.doHurtTarget(level,entity);
     }
+    /** En 1.7.10 el clic ampliaba la caja 0,1 por lado (getCollisionBorderSize); sin esto la hormiga mide 0,1. */
+    @Override public float getPickRadius() { return 0.1f; }
+
     @Override protected InteractionResult mobInteract(Player player, InteractionHand hand) {
         if (hand!=InteractionHand.MAIN_HAND || !player.getItemInHand(hand).isEmpty()) return super.mobInteract(player,hand);
         if (!(player instanceof ServerPlayer traveler)) return InteractionResult.SUCCESS;
@@ -66,6 +69,7 @@ final class RedAnt extends Creatures.Creature {
             ant.snapTo(pos.getX()+.5,pos.getY(),pos.getZ()+.5,0,0);
             ant.setPersistenceRequired();
             if(!dest.addFreshEntity(ant))return explain(traveler,"travel");
+            LOGGER.info("Hormiga de vuelta {} en {} {}", antSpecies, dest.dimension().identifier(), pos.toShortString());
         }
         if (!traveler.teleportTo(dest,pos.getX()+0.5,pos.getY(),pos.getZ()+0.5,Set.of(),traveler.getYRot(),traveler.getXRot(),true)) return explain(traveler,"travel");
         traveler.resetFallDistance();
@@ -89,6 +93,8 @@ final class RedAnt extends Creatures.Creature {
             if (y<=level.getMinY() || y+1>level.getMaxY() || !level.isEmptyBlock(feet) || !level.isEmptyBlock(feet.above())) continue;
             var floor=feet.below();
             var state=level.getBlockState(floor);
+            // Ni el jugador ni la hormiga de vuelta (1 de vida) deben llegar sobre la copa de un árbol.
+            if(state.is(net.minecraft.tags.BlockTags.LOGS) || state.is(net.minecraft.tags.BlockTags.LEAVES)) continue;
             if(state.isFaceSturdy(level,floor,Direction.UP) && state.getFluidState().isEmpty() && !state.is(Blocks.MAGMA_BLOCK) && !state.is(Blocks.CAMPFIRE) && !state.is(Blocks.CACTUS)) return feet;
             if(water==null && state.is(Blocks.WATER) && level.isEmptyBlock(feet.above(2))) water=feet;
         }

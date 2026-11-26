@@ -1,4 +1,4 @@
-# OreSpawn 0.3.5 · Proyecto fuente para Minecraft 26.2
+# OreSpawn 0.3.6 · Proyecto fuente para Minecraft 26.2
 Esta entrega contiene el proyecto editable. Cada envío al repositorio compila el JAR en GitHub Actions (pestaña Actions, artefacto `orespawn-jar`).
 
 ## Compilar en Windows
@@ -106,3 +106,12 @@ Adaptaciones provisionales:
 - **Hojas de manzano.** Los árboles retorcidos usan hojas de roble persistentes en lugar de las hojas de manzano.
 - **Mascotas.** El clásico llevaba consigo las mascotas que no estaban sentadas; el port todavía no lo hace.
 - **Vaca roja.** Se dibuja con el modelo de vaca de 1.7.10 que usaba el clásico. El modelo de vaca actual tiene otra disposición de textura y deformaba `red_cow.png`.
+
+
+## Correcciones de 0.3.6
+
+- **Escorpiones y hormigas.** El escorpión común y el emperador ya no atacan a ninguna de las tres hormigas (roja, arcoíris e inestable), como en el clásico, donde todas heredan de EntityAnt.
+- **Clic sobre las hormigas.** Se restauró el margen de clic de 1.7.10 (0,1 por lado). Con la caja de 0,1 bloques, el clic solía dar en el suelo.
+- **Llegada.** El jugador y la hormiga de vuelta ya no aterrizan sobre troncos ni hojas; con 1 de vida, la hormiga moría al bajar de un árbol retorcido.
+- **Prueba de supervivencia obligatoria.** El servidor solo coloca los hormigueros. Con un jugador al lado, cada hormiguero genera su primera hormiga; se viaja con ella y se regresa con la que aparece al llegar, sin preparar hormigas en el destino. Los comandos de la prueba solo aceleran los ticks aleatorios, inmovilizan a la hormiga elegida, orientan la cámara y, para el regreso, nivelan unos bloques de suelo frente a la hormiga.
+- **Nota.** La hormiga de vuelta aparece donde llega el jugador, pero se mueve: si tardas, puede alejarse unos bloques.
