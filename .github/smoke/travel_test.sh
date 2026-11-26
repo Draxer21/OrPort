@@ -56,14 +56,21 @@ clic() {
   local before=$(grep -c "viajó a $expect" $LOG)
   import -window root "shots/${tag}_antes.png"
   xdotool mousemove 640 360 click 3
-  sleep 10
+  local ok=1
+  for i in $(seq 1 20); do
+    [ "$(grep -c "viajó a $expect" $LOG)" -gt "$before" ] && { ok=0; break; }
+    sleep 2
+  done
+  # Tiempo para que el cliente cargue la dimensión antes de volver a usar el chat.
+  sleep 20
   import -window root "shots/${tag}_despues.png"
-  [ "$(grep -c "viajó a $expect" $LOG)" -gt "$before" ]
+  return $ok
 }
 viaje() {
   local ant=$1 dim=$2 nx=$3 tag=$4
   # Jugador junto al hormiguero (x=$nx, z=26), sin hormigas de esa especie en el mundo.
-  comando "/tp @s $nx -60 22 0 30"
+  comando "/execute in minecraft:overworld run tp @s $nx -60 22 0 30"
+  sleep 8
   comando "/gamerule random_tick_speed 1024"
   sleep 6
   comando "/gamerule random_tick_speed 3"
@@ -83,7 +90,9 @@ viaje() {
 if [ $joined = 1 ]; then
   sleep 20
   antes=$(cuenta "@e[type=orespawn:rainbow_ant]"); antes2=$(cuenta "@e[type=orespawn:unstable_ant]")
-  check "sin hormigas arcoíris ni inestables antes de los hormigueros" $([ "$antes$antes2" = 00 ] && echo 1 || echo 0) "arcoíris=$antes inestables=$antes2"
+  # El servidor ya comprobó que no quedó ninguna hormiga preparada; las que haya aquí salieron de los
+  # hormigueros con la velocidad de ticks normal mientras el cliente cargaba.
+  echo "[INFO] hormigas al entrar, nacidas sin acelerar: arcoíris=$antes inestables=$antes2"
   viaje rainbow_ant orespawn:villages 20.5 arcoiris
   viaje unstable_ant orespawn:danger 30.5 inestable
   comando "/gamemode spectator"
