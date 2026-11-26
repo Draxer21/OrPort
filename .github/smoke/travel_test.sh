@@ -44,11 +44,14 @@ cuenta() {
 fallos=0
 check() { if [ "$2" = 1 ]; then echo "[OK ] $1 ${3:-}"; else echo "[FALLO] $1 ${3:-}"; fallos=$((fallos + 1)); fi; }
 # Inmoviliza la hormiga más cercana de la especie y coloca al jugador 1,5 bloques al norte, mirándola.
+congelar() {
+  comando "/clear @s"
+  comando "/effect give @e[type=orespawn:$1,distance=..64,sort=nearest,limit=1] minecraft:slowness 600 255 true"
+  sleep 4
+}
+# Lee la posición de la hormiga inmóvil y coloca al jugador 1,5 bloques al norte, mirándola.
 apuntar() {
   local sel="@e[type=orespawn:$1,distance=..64,sort=nearest,limit=1]"
-  comando "/clear @s"
-  comando "/effect give $sel minecraft:slowness 600 255 true"
-  sleep 3
   local before=$(wc -l < $LOG)
   comando "/data get entity $sel Pos"
   sleep 1
@@ -56,16 +59,16 @@ apuntar() {
   read -r ax ay az <<< "$pos"
   echo "hormiga en $ax $ay $az"
   comando "/tp @s $ax $ay $(python3 -c "print($az - 1.5)") 0 46.3"
-  sleep 3
+  sleep 4
 }
 clic() {
-  local expect=$1 tag=$2
-  local before=$(grep -c "viajó a $expect" $LOG)
-  import -window root "shots/${tag}_antes.png"
-  local ok=1
-  for intento in 1 2 3; do
+  local ant=$1 expect=$2 tag=$3
+  local before=$(grep -c "viajó a $expect" $LOG) ok=1
+  for intento in 1 2 3 4; do
+    apuntar $ant
+    [ $intento = 1 ] && import -window root "shots/${tag}_antes.png"
     xdotool mousemove 640 360 click 3
-    for i in $(seq 1 6); do
+    for i in $(seq 1 5); do
       [ "$(grep -c "viajó a $expect" $LOG)" -gt "$before" ] && { ok=0; break; }
       sleep 2
     done
@@ -87,8 +90,8 @@ viaje() {
   local nacidas=$(cuenta "@e[type=orespawn:$ant,distance=..20]")
   check "$tag: el hormiguero genera hormigas con el jugador cerca" $([ "$nacidas" -ge 1 ] && echo 1 || echo 0) "hormigas=$nacidas"
   [ "$nacidas" -ge 1 ] || return
-  apuntar $ant
-  clic "$dim" "${tag}_ida"; check "$tag: ida a $dim con una hormiga del hormiguero" $([ $? = 0 ] && echo 1 || echo 0)
+  congelar $ant
+  clic $ant "$dim" "${tag}_ida"; check "$tag: ida a $dim con una hormiga del hormiguero" $([ $? = 0 ] && echo 1 || echo 0)
   sleep 4
   # En el destino no había ninguna hormiga de esta especie; la de vuelta pudo alejarse mientras cargaba.
   grep -o "Hormiga de vuelta $ant en $dim.*" $LOG | tail -1
@@ -96,8 +99,8 @@ viaje() {
   check "$tag: aparece una hormiga de vuelta al llegar" $([ "$vuelta" -ge 1 ] && echo 1 || echo 0) "hormigas=$vuelta"
   [ "$vuelta" -ge 1 ] || return
   import -window root "shots/${tag}_llegada.png"
-  apuntar $ant
-  clic "minecraft:overworld" "${tag}_vuelta"; check "$tag: regreso al mundo principal con esa hormiga" $([ $? = 0 ] && echo 1 || echo 0)
+  congelar $ant
+  clic $ant "minecraft:overworld" "${tag}_vuelta"; check "$tag: regreso al mundo principal con esa hormiga" $([ $? = 0 ] && echo 1 || echo 0)
 }
 if [ $joined = 1 ]; then
   sleep 20
@@ -106,7 +109,7 @@ if [ $joined = 1 ]; then
   # hormigueros con la velocidad de ticks normal mientras el cliente cargaba.
   echo "[INFO] hormigas al entrar, nacidas sin acelerar: arcoíris=$antes inestables=$antes2"
   viaje rainbow_ant orespawn:villages 20.5 arcoiris
-  viaje unstable_ant orespawn:danger 30.5 inestable
+  viaje unstable_ant orespawn:danger 230.5 inestable
   comando "/gamemode spectator"
   comando "/execute in orespawn:villages run tp @s 16 110 -20 0 30"
   sleep 35

@@ -212,8 +212,10 @@ def main():
     rc.cmd("kill @e[type=orespawn:unstable_ant]")
     rc.cmd(f"fill 15 {Y} 15 35 {Y + 4} 30 air")
     rc.cmd(f"setblock 20 {Y - 1} 26 orespawn:rainbow_ant_block")
-    rc.cmd(f"setblock 30 {Y - 1} 26 orespawn:unstable_ant_block")
-    nests = rc.cmd(f"execute if block 20 {Y - 1} 26 orespawn:rainbow_ant_block") + rc.cmd(f"execute if block 30 {Y - 1} 26 orespawn:unstable_ant_block")
+    rc.cmd("forceload add 208 0 255 47")
+    time.sleep(2)
+    rc.cmd(f"setblock 230 {Y - 1} 26 orespawn:unstable_ant_block")
+    nests = rc.cmd(f"execute if block 20 {Y - 1} 26 orespawn:rainbow_ant_block") + rc.cmd(f"execute if block 230 {Y - 1} 26 orespawn:unstable_ant_block")
     ants = count(rc, "@e[type=orespawn:rainbow_ant]") + count(rc, "@e[type=orespawn:unstable_ant]")
     check("hormigueros colocados y ninguna hormiga preparada", nests.count("passed") == 2 and ants == 0, f"hormigas={ants}")
 
