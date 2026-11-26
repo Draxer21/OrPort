@@ -36,7 +36,7 @@ cuenta() {
   tail -n +$((before + 1)) $LOG | grep -oE "Count: [0-9]+" | tail -1 | grep -oE "[0-9]+" || echo 0
 }
 fallos=0
-check() { if [ "$2" = 1 ]; then echo "[OK ] $1 $3"; else echo "[FALLO] $1 $3"; fallos=$((fallos + 1)); fi; }
+check() { if [ "$2" = 1 ]; then echo "[OK ] $1 ${3:-}"; else echo "[FALLO] $1 ${3:-}"; fallos=$((fallos + 1)); fi; }
 # Inmoviliza la hormiga más cercana de la especie y coloca al jugador 1,5 bloques al norte mirándola.
 apuntar() {
   local sel="@e[type=orespawn:$1,sort=nearest,limit=1]"
@@ -45,7 +45,8 @@ apuntar() {
   sleep 3
 }
 clic() {
-  local expect=$1 tag=$2 before=$(grep -c "viajó a $expect" $LOG)
+  local expect=$1 tag=$2
+  local before=$(grep -c "viajó a $expect" $LOG)
   import -window root "shots/${tag}_antes.png"
   xdotool mousemove 640 360 click 3
   sleep 10
