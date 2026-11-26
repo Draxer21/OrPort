@@ -45,7 +45,7 @@ fallos=0
 check() { if [ "$2" = 1 ]; then echo "[OK ] $1 ${3:-}"; else echo "[FALLO] $1 ${3:-}"; fallos=$((fallos + 1)); fi; }
 # Inmoviliza la hormiga más cercana de la especie y coloca al jugador 1,5 bloques al norte, mirándola.
 apuntar() {
-  local sel="@e[type=orespawn:$1,sort=nearest,limit=1]"
+  local sel="@e[type=orespawn:$1,distance=..64,sort=nearest,limit=1]"
   comando "/clear @s"
   comando "/data merge entity $sel {NoAI:1b}"
   local before=$(wc -l < $LOG)
