@@ -93,6 +93,8 @@ final class RedAnt extends Creatures.Creature {
             if (y<=level.getMinY() || y+1>level.getMaxY() || !level.isEmptyBlock(feet) || !level.isEmptyBlock(feet.above())) continue;
             var floor=feet.below();
             var state=level.getBlockState(floor);
+            // Ni el jugador ni la hormiga de vuelta (1 de vida) deben llegar sobre la copa de un árbol.
+            if(state.is(net.minecraft.tags.BlockTags.LOGS) || state.is(net.minecraft.tags.BlockTags.LEAVES)) continue;
             if(state.isFaceSturdy(level,floor,Direction.UP) && state.getFluidState().isEmpty() && !state.is(Blocks.MAGMA_BLOCK) && !state.is(Blocks.CAMPFIRE) && !state.is(Blocks.CACTUS)) return feet;
             if(water==null && state.is(Blocks.WATER) && level.isEmptyBlock(feet.above(2))) water=feet;
         }

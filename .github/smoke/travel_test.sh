@@ -58,14 +58,20 @@ apuntar() {
   local pos=$(tail -n +$((before + 1)) $LOG | grep -oE "\[-?[0-9.]+d, -?[0-9.]+d, -?[0-9.]+d\]" | tail -1 | tr -d '[]d,')
   read -r ax ay az <<< "$pos"
   echo "hormiga en $ax $ay $az"
+  if [ "${2:-}" = nivelar ]; then
+    # Solo cámara: suelo llano y aire entre el jugador y la hormiga para que el clic no dé en una ladera.
+    local bx=${ax%.*} by=${ay%.*} bz=${az%.*}
+    comando "/fill $((bx - 2)) $((by - 1)) $((bz - 3)) $((bx + 2)) $((by - 1)) $((bz + 1)) minecraft:grass_block"
+    comando "/fill $((bx - 2)) $by $((bz - 3)) $((bx + 2)) $((by + 2)) $((bz + 1)) minecraft:air"
+  fi
   comando "/tp @s $ax $ay $(python3 -c "print($az - 1.5)") 0 46.3"
   sleep 4
 }
 clic() {
-  local ant=$1 expect=$2 tag=$3
+  local ant=$1 expect=$2 tag=$3 modo=${4:-}
   local before=$(grep -c "viajó a $expect" $LOG) ok=1
   for intento in 1 2 3 4; do
-    apuntar $ant
+    apuntar $ant $modo
     [ $intento = 1 ] && import -window root "shots/${tag}_antes.png"
     xdotool mousemove 640 360 click 3
     for i in $(seq 1 5); do
@@ -100,7 +106,7 @@ viaje() {
   [ "$vuelta" -ge 1 ] || return
   import -window root "shots/${tag}_llegada.png"
   congelar $ant
-  clic $ant "minecraft:overworld" "${tag}_vuelta"; check "$tag: regreso al mundo principal con esa hormiga" $([ $? = 0 ] && echo 1 || echo 0)
+  clic $ant "minecraft:overworld" "${tag}_vuelta" nivelar; check "$tag: regreso al mundo principal con esa hormiga" $([ $? = 0 ] && echo 1 || echo 0)
 }
 if [ $joined = 1 ]; then
   sleep 20
