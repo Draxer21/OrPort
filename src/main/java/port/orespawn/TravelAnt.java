@@ -35,6 +35,9 @@ final class TravelAnt extends Creatures.Creature {
         goalSelector.addGoal(2, wander);
     }
 
+    /** En 1.7.10 el clic ampliaba la caja 0,1 por lado (getCollisionBorderSize); sin esto la hormiga mide 0,1. */
+    @Override public float getPickRadius() { return 0.1f; }
+
     @Override protected InteractionResult mobInteract(Player player, InteractionHand hand) {
         if (hand != InteractionHand.MAIN_HAND || !player.getItemInHand(hand).isEmpty()) return super.mobInteract(player, hand);
         if (!(player instanceof ServerPlayer traveler)) return InteractionResult.SUCCESS;
