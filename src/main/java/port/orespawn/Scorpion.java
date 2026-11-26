@@ -18,7 +18,7 @@ import net.minecraft.world.phys.AABB;
 /** Escorpión común de OreSpawn 1.7.10: 15 de vida, 4 de ataque, 10 de armadura. */
 final class Scorpion extends Creatures.Creature {
     /** Criaturas que MyUtils.isIgnoreable descarta como presa en el clásico. */
-    private static final Set<String> IGNORED = Set.of("red_ant", "termite", "butterfly", "moth", "mosquito", "dragonfly", "firefly");
+    private static final Set<String> IGNORED = Set.of("red_ant", "rainbow_ant", "unstable_ant", "termite", "butterfly", "moth", "mosquito", "dragonfly", "firefly");
 
     Scorpion(EntityType<? extends PathfinderMob> type, Level level) {
         super(type, level);
@@ -48,6 +48,8 @@ final class Scorpion extends Creatures.Creature {
      */
     static boolean isPrey(LivingEntity target, boolean emperor) {
         if (!target.isAlive() || target instanceof Scorpion || target instanceof EmperorScorpion) return false;
+        // En el clásico las tres hormigas heredan de EntityAnt, que MyUtils.isIgnoreable descarta.
+        if (target instanceof RedAnt || target instanceof TravelAnt) return false;
         if (target instanceof Creatures.Creature creature && IGNORED.contains(creature.species())) return false;
         var type = target.getType();
         String id = net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(type).toString();
