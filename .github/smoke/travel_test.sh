@@ -57,6 +57,7 @@ apuntar() {
   sleep 1
   local pos=$(tail -n +$((before + 1)) $LOG | grep -oE "\[-?[0-9.]+d, -?[0-9.]+d, -?[0-9.]+d\]" | tail -1 | tr -d '[]d,')
   read -r ax ay az <<< "$pos"
+  if [ -z "${az:-}" ]; then echo "no se pudo leer la posición de la hormiga"; return 1; fi
   echo "hormiga en $ax $ay $az"
   if [ "${2:-}" = nivelar ]; then
     # Solo cámara: suelo llano y aire entre el jugador y la hormiga para que el clic no dé en una ladera.
@@ -71,10 +72,11 @@ clic() {
   local ant=$1 expect=$2 tag=$3 modo=${4:-}
   local before=$(grep -c "viajó a $expect" $LOG) ok=1
   for intento in 1 2 3 4; do
-    apuntar $ant $modo
+    [ "$(grep -c "viajó a $expect" $LOG)" -gt "$before" ] && { ok=0; break; }
+    apuntar $ant $modo || { sleep 5; continue; }
     [ $intento = 1 ] && import -window root "shots/${tag}_antes.png"
     xdotool mousemove 640 360 click 3
-    for i in $(seq 1 5); do
+    for i in $(seq 1 12); do
       [ "$(grep -c "viajó a $expect" $LOG)" -gt "$before" ] && { ok=0; break; }
       sleep 2
     done
