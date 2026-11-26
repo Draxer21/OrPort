@@ -30,10 +30,16 @@ comando() {
 }
 # Ejecuta "execute if entity <selector>" desde el jugador y devuelve el recuento que muestra el chat.
 cuenta() {
-  local before=$(wc -l < $LOG)
-  comando "/execute if entity $1"
-  sleep 1
-  tail -n +$((before + 1)) $LOG | grep -oE "Count: [0-9]+" | tail -1 | grep -oE "[0-9]+" || echo 0
+  local before out
+  for intento in 1 2 3; do
+    before=$(wc -l < $LOG)
+    comando "/execute if entity $1"
+    sleep 1
+    out=$(tail -n +$((before + 1)) $LOG | grep -oE "Test (passed. Count: [0-9]+|failed)" | tail -1)
+    [ -n "$out" ] && break
+    sleep 5
+  done
+  echo "$out" | grep -oE "[0-9]+" || echo 0
 }
 fallos=0
 check() { if [ "$2" = 1 ]; then echo "[OK ] $1 ${3:-}"; else echo "[FALLO] $1 ${3:-}"; fallos=$((fallos + 1)); fi; }
@@ -55,11 +61,14 @@ clic() {
   local expect=$1 tag=$2
   local before=$(grep -c "viajó a $expect" $LOG)
   import -window root "shots/${tag}_antes.png"
-  xdotool mousemove 640 360 click 3
   local ok=1
-  for i in $(seq 1 20); do
-    [ "$(grep -c "viajó a $expect" $LOG)" -gt "$before" ] && { ok=0; break; }
-    sleep 2
+  for intento in 1 2 3; do
+    xdotool mousemove 640 360 click 3
+    for i in $(seq 1 6); do
+      [ "$(grep -c "viajó a $expect" $LOG)" -gt "$before" ] && { ok=0; break; }
+      sleep 2
+    done
+    [ $ok = 0 ] && { echo "clic aceptado en el intento $intento"; break; }
   done
   # Tiempo para que el cliente cargue la dimensión antes de volver a usar el chat.
   sleep 20
