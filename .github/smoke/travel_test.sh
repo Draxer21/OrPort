@@ -37,12 +37,17 @@ cuenta() {
 }
 fallos=0
 check() { if [ "$2" = 1 ]; then echo "[OK ] $1 ${3:-}"; else echo "[FALLO] $1 ${3:-}"; fallos=$((fallos + 1)); fi; }
-# Inmoviliza la hormiga más cercana de la especie, la pone 1,5 bloques al sur del jugador y orienta la cámara hacia ella.
+# Inmoviliza la hormiga más cercana de la especie y coloca al jugador 1,5 bloques al norte, mirándola.
 apuntar() {
   local sel="@e[type=orespawn:$1,sort=nearest,limit=1]"
   comando "/data merge entity $sel {NoAI:1b}"
-  comando "/execute at @s run tp $sel ~ ~ ~1.5"
-  comando "/tp @s ~ ~ ~ 0 46.3"
+  local before=$(wc -l < $LOG)
+  comando "/data get entity $sel Pos"
+  sleep 1
+  local pos=$(tail -n +$((before + 1)) $LOG | grep -oE "\[-?[0-9.]+d, -?[0-9.]+d, -?[0-9.]+d\]" | tail -1 | tr -d '[]d,')
+  read -r ax ay az <<< "$pos"
+  echo "hormiga en $ax $ay $az"
+  comando "/tp @s $ax $ay $(python3 -c "print($az - 1.5)") 0 46.3"
   sleep 3
 }
 clic() {
