@@ -1,5 +1,5 @@
 {
-  "message.orespawn.ant.dimension": "La dimensión minera no está cargada. Reinicia el mundo con OreSpawn activado.",
+  "message.orespawn.ant.dimension": "La dimensión de destino no está cargada. Reinicia el mundo con OreSpawn activado.",
   "message.orespawn.ant.terrain": "No hay una llegada segura cerca. Prueba desde otro lugar.",
   "message.orespawn.ant.travel": "Se interrumpió el viaje. Vuelve a intentarlo.",
   "item.orespawn.big_bertha_blade": "Hoja de Big Bertha",
@@ -282,5 +282,14 @@
   "item.orespawn.emperor_scorpion_egg": "Huevo de escorpión emperador",
   "block.orespawn.emperor_scorpion_ore": "Fósil de escorpión emperador",
   "item.orespawn.scorpion_cage": "Escorpión enjaulado",
-  "item.orespawn.emperor_scorpion_cage": "Escorpión emperador enjaulado"
+  "item.orespawn.emperor_scorpion_cage": "Escorpión emperador enjaulado",
+  "entity.orespawn.thrown_critter_cage": "Jaula lanzada",
+  "entity.orespawn.rainbow_ant": "Hormiga arcoíris",
+  "entity.orespawn.unstable_ant": "Hormiga inestable",
+  "item.orespawn.rainbow_ant_egg": "Huevo de hormiga arcoíris",
+  "item.orespawn.unstable_ant_egg": "Huevo de hormiga inestable",
+  "block.orespawn.rainbow_ant_block": "Hormiguero arcoíris",
+  "block.orespawn.unstable_ant_block": "Hormiguero inestable",
+  "biome.orespawn.villages": "Aldeas",
+  "biome.orespawn.danger": "Dimensión peligrosa"
 }

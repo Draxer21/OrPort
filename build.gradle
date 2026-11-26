@@ -2,12 +2,18 @@ plugins {
     id 'java-library'
     id 'net.neoforged.moddev' version '2.0.148'
 }
-version = '0.3.3'
+version = '0.3.6'
 group = 'port.orespawn'
 java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 neoForge {
     version = '26.2.0.93'
-    runs { client { client() }; server { server() } }
+    runs {
+        client {
+            client()
+            if (project.hasProperty('quickPlay')) programArguments.addAll('--quickPlaySingleplayer', project.property('quickPlay').toString())
+        }
+        server { server() }
+    }
     mods { orespawn { sourceSet sourceSets.main } }
 }
 

@@ -32,6 +32,8 @@ public final class Creatures {
         add("cryolophosaurus", 0.75f, 0.75f, 45, 0.25, 8.0, true, "cryolophosaurus_egg");
         add("cavefisher", 1.35f, 0.75f, 20, 0.2, 4.0, true, "cavefisher_egg");
         add("red_ant", 0.2f, 0.2f, 2, 0.2, 1.0, false, "red_ant_egg");
+        add("rainbow_ant", 0.1f, 0.1f, 1, 0.15, 0, false, "rainbow_ant_egg");
+        add("unstable_ant", 0.1f, 0.1f, 1, 0.15, 0, false, "unstable_ant_egg");
         add("bird", 0.4f, 0.4f, 2, 0.1, 2, false, "bird_egg");
         add("butterfly", 0.4f, 0.4f, 1, 0.1, 2, false, "butterfly_egg");
         add("gammametroid", 1.5f, 1.5f, 100, 0.15, 10.0, true, "gammametroid_egg");
@@ -69,11 +71,13 @@ public final class Creatures {
     private static void add(String id, float width, float height, double health, double speed, double damage, boolean hostile, String egg) {
         var category = hostile ? MobCategory.MONSTER : MobCategory.CREATURE;
         EntityType.EntityFactory<Creature> factory=switch(id){
+            case "scorpion" -> Scorpion::new;
             case "emperor_scorpion" -> EmperorScorpion::new;
             case "basilisk" -> Basilisk::new;
             case "triffid" -> Triffid::new;
             case "mantis" -> Mantis::new;
             case "red_ant" -> RedAnt::new;
+            case "rainbow_ant", "unstable_ant" -> TravelAnt::new;
             case "doom_worm" -> DoomWorm::new;
             case "redcow","baryonyx" -> BreedingCreature::new;
             default -> Companion.supports(id)?Companion::new:Creature::new;
@@ -84,14 +88,28 @@ public final class Creatures {
         if (egg != null) OreSpawn.ITEMS.registerItem(egg, SpawnEggItem::new, p -> p.spawnEgg(type.get()));
     }
     private static void placements(net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent event) {
-        for (var data : SPECIES.values()) event.register(data.type.get(), SpawnPlacementTypes.ON_GROUND,
-            net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mob::checkMobSpawnRules,
-            net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        SPECIES.forEach((id, data) -> event.register(data.type.get(), SpawnPlacementTypes.ON_GROUND,
+            net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            switch (id) {
+                case "scorpion" -> Scorpion::canSpawn;
+                case "emperor_scorpion" -> Scorpion::canSpawnEmperor;
+                case "mantis" -> Creatures::canSpawnMantis;
+                default -> Mob::checkMobSpawnRules;
+            },
+            net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent.Operation.REPLACE));
+    }
+    /** Mantis.getCanSpawnHere del clásico: altura 50 o más y ninguna otra mantis en 32 bloques. */
+    private static boolean canSpawnMantis(EntityType<Creature> type, net.minecraft.world.level.ServerLevelAccessor level,
+            EntitySpawnReason reason, net.minecraft.core.BlockPos pos, net.minecraft.util.RandomSource random) {
+        if (!Mob.checkMobSpawnRules(type, level, reason, pos, random)) return false;
+        if (reason == EntitySpawnReason.SPAWNER) return true;
+        return pos.getY() >= 50 && level.getEntitiesOfClass(Mantis.class, new net.minecraft.world.phys.AABB(pos).inflate(32, 16, 32)).isEmpty();
     }
     private static void attributes(EntityAttributeCreationEvent event) {
         SPECIES.forEach((id,data)->event.put(data.type.get(), Mob.createMobAttributes()
             .add(Attributes.MAX_HEALTH, data.health).add(Attributes.MOVEMENT_SPEED, data.speed)
             .add(Attributes.ARMOR, switch(id){case "trex" -> 14; case "hercules_beetle" -> 19; case "scorpion" -> 10; case "emperor_scorpion" -> 20; case "basilisk" -> 15; case "triffid" -> 12; case "mantis" -> 10; case "mothra" -> 8; default -> 0;})
+            .add(Attributes.FOLLOW_RANGE, switch(id){case "scorpion" -> 8; case "emperor_scorpion" -> 24; default -> 16;})
             .add(Attributes.TEMPT_RANGE, 10).add(Attributes.FLYING_SPEED, data.speed).add(Attributes.ATTACK_DAMAGE, data.damage).build()));
     }
     public static class Creature extends PathfinderMob {
