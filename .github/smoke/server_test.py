@@ -240,6 +240,7 @@ def main():
     rc.cmd(f"summon orespawn:emperor_scorpion 2 {Y} 12 {{NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f],Tags:[\"scene\"]}}")
     time.sleep(2)
     check("escena de cliente preparada", count(rc, "@e[tag=scene]") == 3)
+    rc.cmd("kill @e[type=item]")
     rc.cmd("save-all flush")
     time.sleep(3)
     rc.cmd("stop")
