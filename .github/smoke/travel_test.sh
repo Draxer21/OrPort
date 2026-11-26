@@ -47,7 +47,8 @@ check() { if [ "$2" = 1 ]; then echo "[OK ] $1 ${3:-}"; else echo "[FALLO] $1 ${
 apuntar() {
   local sel="@e[type=orespawn:$1,distance=..64,sort=nearest,limit=1]"
   comando "/clear @s"
-  comando "/data merge entity $sel {NoAI:1b}"
+  comando "/effect give $sel minecraft:slowness 600 255 true"
+  sleep 3
   local before=$(wc -l < $LOG)
   comando "/data get entity $sel Pos"
   sleep 1
