@@ -129,7 +129,7 @@ probar_mariposa() {
   comando "/clear @s"
   comando "/execute in minecraft:overworld run tp @s 82.5 80 82.5"
   comando "/forceload add 80 80"
-  comando "/fill 80 79 80" 86 79 86 minecraft:stone"
+  comando "/fill 80 79 80 86 79 86 minecraft:stone"
   comando "/tp @s 82.5 80 82.5 0 0"
   comando '/summon orespawn:butterfly 82.5 81.43 84.5 {NoAI:1b,NoGravity:1b,Tags:["chaos_test"]}'
   sel='@e[type=orespawn:butterfly,tag=chaos_test,limit=1]'
