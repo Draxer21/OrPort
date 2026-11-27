@@ -110,8 +110,63 @@ viaje() {
   congelar $ant
   clic $ant "minecraft:overworld" "${tag}_vuelta" nivelar; check "$tag: regreso al mundo principal con esa hormiga" $([ $? = 0 ] && echo 1 || echo 0)
 }
+# Cliente real, escena aislada: la línea de visión debe atravesar la caja de la mariposa.
+apuntar_mariposa() {
+  local sel=$1
+  comando "/data merge entity $sel {NoAI:1b,NoGravity:1b,Motion:[0d,0d,0d]}"
+  comando "/execute at @s run tp $sel ~ ~1.43 ~2"
+  comando "/tp @s ~ ~ ~ 0 0"
+}
+viajar_mariposa() {
+  local sel=$1 dim=$2 linea intento
+  linea=$(wc -l < "$LOG")
+  for intento in 1 2 3; do
+    apuntar_mariposa "$sel"
+    xdotool click 3
+    for i in $(seq 1 12); do
+      if tail -n +$((linea+1)) "$LOG" | grep -q "viajó a $dim con butterfly"; then return 0; fi
+      sleep 2
+    done
+  done
+  return 1
+}
+probar_mariposa() {
+  local sel linea
+  comando "/gamemode survival"
+  comando "/effect give @s minecraft:resistance 600 4 true"
+  comando "/clear @s"
+  comando "/forceload add 80 80"
+  comando "/fill 80 79 80 86 79 86 minecraft:stone"
+  comando "/tp @s 82.5 80 82.5 0 0"
+  comando '/summon orespawn:butterfly 82.5 81.43 84.5 {NoAI:1b,NoGravity:1b,Tags:["chaos_test"]}'
+  sel='@e[type=orespawn:butterfly,tag=chaos_test,limit=1]'
+  comando "/item replace entity @s weapon.mainhand with minecraft:stick"
+  apuntar_mariposa "$sel"
+  linea=$(wc -l < "$LOG")
+  xdotool click 3; sleep 3
+  if tail -n +$((linea+1)) "$LOG" | grep -q "viajó a orespawn:chaos"; then
+    check "mariposa: con objeto permanece en el Overworld" 0; return
+  fi
+  check "mariposa: con objeto permanece en el Overworld" 1
+  comando "/clear @s"
+  if ! viajar_mariposa "$sel" orespawn:chaos; then check "mariposa: ida a Caos" 0; return; fi
+  check "mariposa: ida a Caos" 1
+  sleep 6
+  sel='@e[type=orespawn:butterfly,distance=..48,sort=nearest,limit=1]'
+  if [ "$(cuenta "$sel")" -lt 1 ]; then check "mariposa de regreso cerca de la llegada" 0; return; fi
+  check "mariposa de regreso cerca de la llegada" 1
+  import -window root "shots/caos_llegada.png"
+  # Despejar la línea de visión solo en la escena de prueba, después de comprobar la llegada.
+  comando "/fill ~-1 ~ ~ ~1 ~2 ~3 minecraft:air"
+  if viajar_mariposa "$sel" minecraft:overworld; then
+    check "mariposa: regreso al Overworld" 1
+  else
+    check "mariposa: regreso al Overworld" 0
+  fi
+}
 if [ $joined = 1 ]; then
   sleep 20
+  probar_mariposa
   antes=$(cuenta "@e[type=orespawn:rainbow_ant]"); antes2=$(cuenta "@e[type=orespawn:unstable_ant]")
   # El servidor ya comprobó que no quedó ninguna hormiga preparada; las que haya aquí salieron de los
   # hormigueros con la velocidad de ticks normal mientras el cliente cargaba.
