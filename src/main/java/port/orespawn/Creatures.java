@@ -78,6 +78,7 @@ public final class Creatures {
             case "mantis" -> Mantis::new;
             case "brutalfly" -> Brutalfly::new;
             case "butterfly" -> Butterfly::new;
+            case "termite" -> Termite::new;
             case "red_ant" -> RedAnt::new;
             case "rainbow_ant", "unstable_ant" -> TravelAnt::new;
             case "doom_worm" -> DoomWorm::new;

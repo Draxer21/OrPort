@@ -31,7 +31,10 @@
     "orespawn:mediumworm_ore",
     "orespawn:largeworm_ore",
     "orespawn:doomworm_ore",
-    "orespawn:mantis_ore", "orespawn:scorpion_ore", "orespawn:emperor_scorpion_ore", "orespawn:basilisk_ore",
+    "orespawn:mantis_ore",
+    "orespawn:scorpion_ore",
+    "orespawn:emperor_scorpion_ore",
+    "orespawn:basilisk_ore",
     "orespawn:beaver_ore",
     "orespawn:brutalfly_ore",
     "orespawn:kyuubi_ore",
@@ -42,6 +45,8 @@
     "orespawn:ruby_ore",
     "orespawn:ruby_block",
     "orespawn:tigerseye_ore",
-    "orespawn:tigerseye_block"
+    "orespawn:tigerseye_block",
+    "orespawn:crystal_stone",
+    "orespawn:crystal_coal_ore"
   ]
 }

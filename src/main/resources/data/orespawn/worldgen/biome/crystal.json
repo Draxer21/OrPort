@@ -1,0 +1,56 @@
+{
+  "attributes": {
+    "minecraft:visual/sky_color": "#a0d5fa"
+  },
+  "carvers": [],
+  "downfall": 0.5,
+  "effects": {
+    "water_color": "#58c6d5"
+  },
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "orespawn:crystal_coal",
+      "orespawn:crystal_tigerseye"
+    ],
+    [],
+    [],
+    [
+      "orespawn:crystal_tree",
+      "orespawn:termite_nest"
+    ],
+    []
+  ],
+  "has_precipitation": true,
+  "spawn_costs": {},
+  "spawners": {
+    "ambient": [],
+    "axolotls": [],
+    "creature": [
+      {
+        "type": "orespawn:termite",
+        "weight": 8,
+        "minCount": 2,
+        "maxCount": 4
+      }
+    ],
+    "misc": [],
+    "monster": [
+      {
+        "type": "orespawn:mantis",
+        "weight": 1,
+        "minCount": 1,
+        "maxCount": 1
+      }
+    ],
+    "underground_water_creature": [],
+    "water_ambient": [],
+    "water_creature": []
+  },
+  "temperature": 0.7
+}

@@ -1,0 +1,81 @@
+# Se ejecuta desde travel_test.sh con el cliente de Minecraft abierto.
+apuntar_termita() {
+  local sel=$1
+  comando "/data merge entity $sel {NoAI:1b,NoGravity:1b,Motion:[0d,0d,0d]}"
+  comando "/tp $sel ~ ~1.53 ~2"
+  comando "/tp @s ~ ~ ~ 0 0"
+}
+
+probar_cristal() {
+  local sel linea ranura objeto bloqueado i
+  comando "/gamemode survival"
+  comando "/effect give @s minecraft:resistance 600 4 true"
+  comando "/clear @s"
+  xdotool key 1
+  comando "/forceload add 80 80"
+  comando "/fill 80 79 80 86 79 86 minecraft:stone"
+  comando "/tp @s 82.5 80 82.5 0 0"
+  comando "/setblock 84 79 82 orespawn:termite_nest"
+  sleep 8
+  sel='@e[type=orespawn:termite,distance=..16,sort=nearest,limit=1]'
+  if [ "$(cuenta "$sel")" -lt 1 ]; then check "sale una termita del termitero" 0; return; fi
+  check "sale una termita del termitero" 1
+  comando "/tag $sel add crystal_test"
+  sel='@e[type=orespawn:termite,tag=crystal_test,limit=1]'
+  # Validar el mensaje de rechazo y el objeto en la misma ranura después del clic.
+  for ranura in inventory.7 armor.head weapon.offhand; do
+    objeto=minecraft:diamond
+    [ "$ranura" = armor.head ] && objeto=minecraft:iron_helmet
+    comando "/item replace entity @s $ranura with $objeto"
+    apuntar_termita "$sel"
+    linea=$(wc -l < "$LOG")
+    xdotool click 3
+    sleep 2
+    bloqueado=0
+    if tail -n +$((linea+1)) "$LOG" | grep -q "Empty your inventory"; then
+      linea=$(wc -l < "$LOG")
+      comando "/execute if dimension minecraft:overworld if items entity @s $ranura $objeto"
+      if tail -n +$((linea+1)) "$LOG" | grep -q 'Test passed'; then bloqueado=1; fi
+    fi
+    check "Cristal rechaza y conserva $ranura" "$bloqueado"
+    comando "/item replace entity @s $ranura with minecraft:air"
+  done
+  apuntar_termita "$sel"
+  linea=$(wc -l < "$LOG")
+  xdotool click 3
+  for i in $(seq 1 30); do
+    if tail -n +$((linea+1)) "$LOG" | grep -q "viajó a orespawn:crystal con termite"; then break; fi
+    sleep 2
+  done
+  if ! tail -n +$((linea+1)) "$LOG" | grep -q "viajó a orespawn:crystal con termite"; then
+    check "entrada a Cristal con inventario vacío" 0; return
+  fi
+  check "entrada a Cristal con inventario vacío" 1
+  sleep 5
+  sel='@e[type=orespawn:termite,distance=..32,sort=nearest,limit=1]'
+  if [ "$(cuenta "$sel")" -lt 1 ]; then check "termita de regreso" 0; return; fi
+  check "termita de regreso" 1
+  comando "/tag $sel add crystal_return"
+  import -window root "shots/cristal_llegada.png"
+  comando '/execute at @e[type=minecraft:marker,tag=crystal_sample,limit=1] run tp @s ~ ~ ~ 0 90'
+  sleep 2
+  xdotool mousedown 1; sleep 2; xdotool mouseup 1
+  sleep 2
+  local muestra='@s[nbt={Inventory:[{id:"orespawn:crystal_grass"}]}]'
+  check "recoge césped de cristal con la mano" "$([ "$(cuenta "$muestra")" -gt 0 ] && echo 1 || echo 0)"
+  xdotool key 2
+  sel='@e[type=orespawn:termite,tag=crystal_return,limit=1]'
+  comando "/fill ~-1 ~ ~ ~1 ~2 ~3 minecraft:air"
+  apuntar_termita "$sel"
+  linea=$(wc -l < "$LOG")
+  xdotool click 3
+  for i in $(seq 1 30); do
+    if tail -n +$((linea+1)) "$LOG" | grep -q "viajó a minecraft:overworld con termite"; then break; fi
+    sleep 2
+  done
+  if tail -n +$((linea+1)) "$LOG" | grep -q "viajó a minecraft:overworld con termite"; then
+    check "regreso de Cristal con el bloque recogido" "$([ "$(cuenta "$muestra")" -gt 0 ] && echo 1 || echo 0)"
+  else
+    check "regreso de Cristal con el bloque recogido" 0
+  fi
+}

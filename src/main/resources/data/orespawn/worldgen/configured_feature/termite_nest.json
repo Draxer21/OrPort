@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:replace_single_block",
+  "config": {
+    "targets": [
+      {
+        "target": {
+          "predicate_type": "minecraft:block_match",
+          "block": "minecraft:grass_block"
+        },
+        "state": {
+          "Name": "orespawn:termite_nest"
+        }
+      },
+      {
+        "target": {
+          "predicate_type": "minecraft:block_match",
+          "block": "orespawn:crystal_grass"
+        },
+        "state": {
+          "Name": "orespawn:termite_nest"
+        }
+      }
+    ]
+  }
+}

@@ -252,6 +252,24 @@ def main():
     time.sleep(2)
     check("escena de cliente preparada", count(rc, "@e[tag=scene]") == 3)
     rc.cmd("kill @e[type=item]")
+    # Localizar un bloque generado por el mundo para que el cliente lo recoja en supervivencia.
+    crystal = "execute in orespawn:crystal"
+    rc.cmd(f"{crystal} run forceload add 32 32 143 143")
+    sample = None
+    for _ in range(40):
+        if "passed" in rc.cmd(f"{crystal} if loaded 143 64 143"):
+            break
+        time.sleep(1)
+    for x in range(36, 144, 8):
+        for z in range(36, 144, 8):
+            surface = f"{crystal} positioned {x} 80 {z} positioned over world_surface"
+            if "passed" in rc.cmd(f"{surface} if block ~ ~-1 ~ orespawn:crystal_grass if block ~ ~-2 ~ orespawn:crystal_stone"):
+                rc.cmd(f'{surface} run summon minecraft:marker ~0.5 ~ ~0.5 {{Tags:["crystal_sample"]}}')
+                sample = (x, z)
+                break
+        if sample:
+            break
+    check("césped natural sobre piedra de cristal", sample is not None, str(sample))
     rc.cmd("save-all flush")
     time.sleep(3)
     rc.cmd("stop")
