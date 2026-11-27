@@ -76,6 +76,7 @@ public final class Creatures {
             case "basilisk" -> Basilisk::new;
             case "triffid" -> Triffid::new;
             case "mantis" -> Mantis::new;
+            case "brutalfly" -> Brutalfly::new;
             case "red_ant" -> RedAnt::new;
             case "rainbow_ant", "unstable_ant" -> TravelAnt::new;
             case "doom_worm" -> DoomWorm::new;
@@ -108,7 +109,7 @@ public final class Creatures {
     private static void attributes(EntityAttributeCreationEvent event) {
         SPECIES.forEach((id,data)->event.put(data.type.get(), Mob.createMobAttributes()
             .add(Attributes.MAX_HEALTH, data.health).add(Attributes.MOVEMENT_SPEED, data.speed)
-            .add(Attributes.ARMOR, switch(id){case "trex" -> 14; case "hercules_beetle" -> 19; case "scorpion" -> 10; case "emperor_scorpion" -> 20; case "basilisk" -> 15; case "triffid" -> 12; case "mantis" -> 10; case "mothra" -> 8; default -> 0;})
+            .add(Attributes.ARMOR, switch(id){case "trex" -> 14; case "hercules_beetle" -> 19; case "scorpion" -> 10; case "emperor_scorpion" -> 20; case "basilisk" -> 15; case "triffid" -> 12; case "mantis" -> 10; case "mothra" -> 8; case "brutalfly" -> 6; default -> 0;})
             .add(Attributes.FOLLOW_RANGE, switch(id){case "scorpion" -> 8; case "emperor_scorpion" -> 24; default -> 16;})
             .add(Attributes.TEMPT_RANGE, 10).add(Attributes.FLYING_SPEED, data.speed).add(Attributes.ATTACK_DAMAGE, data.damage).build()));
     }
@@ -186,7 +187,7 @@ public final class Creatures {
             var target = getTarget();
             if (target == null || !target.isAlive() || fireCooldown != 0 || !hasLineOfSight(target)) return;
             var id = net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(getType()).getPath();
-            if (!id.equals("mothra") && !id.equals("spyro") && !id.equals("kyuubi")) return;
+            if (!id.equals("mothra") && !id.equals("spyro") && !id.equals("kyuubi") && !id.equals("brutalfly")) return;
             if (distanceToSqr(target) < 16 || distanceToSqr(target) > 1024) return;
             var direction = target.getEyePosition().subtract(getEyePosition()).normalize();
             boolean mothra=id.equals("mothra");
@@ -197,7 +198,7 @@ public final class Creatures {
             var fire = explosive
                 ? new net.minecraft.world.entity.projectile.hurtingprojectile.LargeFireball(server,this,direction,1)
                 : new net.minecraft.world.entity.projectile.hurtingprojectile.SmallFireball(server,this,direction);
-            fire.setPos(getEyePosition().add(direction.scale(mothra?getBbWidth()/2+.3:.75)));
+            fire.setPos(getEyePosition().add(direction.scale(mothra || id.equals("brutalfly") ? getBbWidth()/2+.3 : .75)));
             if(!server.addFreshEntity(fire))return;
             if(mothra)heal(1);
             fireCooldown = id.equals("mothra") ? 35 : 55;
