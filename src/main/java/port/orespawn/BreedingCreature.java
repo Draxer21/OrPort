@@ -17,7 +17,7 @@ class BreedingCreature extends Creatures.Creature {
     private int age,love;
     BreedingCreature(EntityType<? extends PathfinderMob> type,Level level){super(type,level);}
     private Item breedingFood(){return switch(species()){
-        case "redcow" -> Items.WHEAT; case "baryonyx","camarasaurus" -> Items.GOLDEN_APPLE;
+        case "redcow","crystal_cow" -> Items.WHEAT; case "baryonyx","camarasaurus" -> Items.GOLDEN_APPLE;
         case "velocityraptor" -> Items.APPLE;
         case "gammametroid" -> Items.IRON_INGOT;
         default -> Items.AIR;
@@ -28,7 +28,7 @@ class BreedingCreature extends Creatures.Creature {
     @Override protected void registerGoals(){super.registerGoals();if(!Companion.supports(species()))goalSelector.addGoal(3,new TemptGoal(this,1.15,Ingredient.of(breedingFood()),false));}
     @Override protected InteractionResult mobInteract(Player player,InteractionHand hand){
         var stack=player.getItemInHand(hand);
-        if(species().equals("redcow") && !isBaby() && stack.is(Items.BUCKET)){
+        if((species().equals("redcow") || species().equals("crystal_cow")) && !isBaby() && stack.is(Items.BUCKET)){
             if(!level().isClientSide()){player.setItemInHand(hand,ItemUtils.createFilledResult(stack,player,new ItemStack(Items.MILK_BUCKET)));playSound(net.minecraft.sounds.SoundEvents.COW_MILK,1,1);}
             return InteractionResult.SUCCESS;
         }

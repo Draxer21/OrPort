@@ -155,6 +155,7 @@ if [ $joined = 1 ]; then
   sleep 20
   source .github/smoke/crystal_travel.sh
   probar_cristal
+  probar_vacas_cristal
   probar_mariposa
   antes=$(cuenta "@e[type=orespawn:rainbow_ant]"); antes2=$(cuenta "@e[type=orespawn:unstable_ant]")
   # El servidor ya comprobó que no quedó ninguna hormiga preparada; las que haya aquí salieron de los

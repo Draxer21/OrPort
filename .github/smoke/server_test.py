@@ -85,6 +85,15 @@ def main():
     time.sleep(2)
     rc.cmd("kill @e[type=item]")
 
+    # Botín de la vaca de cristal, con tiradas independientes para ambas manzanas.
+    for i in range(16):
+        rc.cmd(f"summon orespawn:crystal_cow {8+i} {Y} 16 {{NoAI:1b}}")
+    rc.cmd("kill @e[type=orespawn:crystal_cow]")
+    time.sleep(2)
+    for drop in ("orespawn:crystal_apple", "minecraft:apple", "minecraft:beef"):
+        check(f"botín de la vaca de cristal: {drop}", count(rc, f'@e[type=item,nbt={{Item:{{id:"{drop}"}}}}]') > 0)
+    rc.cmd("kill @e[type=item]")
+
     # 2. Objetos registrados
     for item in ("scorpion_egg", "emperor_scorpion_egg", "scorpion_cage", "emperor_scorpion_cage",
                  "emperor_scorpion_scale", "scorpion_ore", "emperor_scorpion_ore"):

@@ -60,6 +60,7 @@ public final class Creatures {
         add("beaver", 0.6f, 0.8f, 15, 0.15, 1.0, false, "beaver_egg");
         add("cassowary", 0.5f, 1.2f, 10, 0.25, 8.0, false, "cassowary_egg");
         add("termite", 0.2f, 0.2f, 5, 0.2, 2.0, false, "termite_egg");
+        add("crystal_cow", 0.9f, 1.4f, 10, 0.2, 0, false, "crystal_cow_egg");
         add("redcow", 0.8f, 0.8f, 10, 0.25, 2, false, "redcow_egg");
         add("stinkbug", 0.55f, 0.55f, 5, 0.15, 0.0, false, "stinkbug_egg");
         add("doom_worm", 0.8f, 0.8f, 3000, 0.1, 2, true, "doomworm_egg");
@@ -82,6 +83,7 @@ public final class Creatures {
             case "red_ant" -> RedAnt::new;
             case "rainbow_ant", "unstable_ant" -> TravelAnt::new;
             case "doom_worm" -> DoomWorm::new;
+            case "crystal_cow" -> CrystalCow::new;
             case "redcow","baryonyx" -> BreedingCreature::new;
             default -> Companion.supports(id)?Companion::new:Creature::new;
         };

@@ -2,7 +2,7 @@ plugins {
     id 'java-library'
     id 'net.neoforged.moddev' version '2.0.148'
 }
-version = '0.3.7'
+version = '0.3.8'
 group = 'port.orespawn'
 java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 neoForge {

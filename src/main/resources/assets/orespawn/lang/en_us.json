@@ -300,5 +300,10 @@
   "block.orespawn.crystal_coal_ore": "Crystal Coal Ore",
   "block.orespawn.termite_nest": "Termite Nest",
   "biome.orespawn.crystal": "Crystal Dimension",
-  "message.orespawn.termite.empty_inventory": "Empty your inventory, including armor and offhand, before entering the Crystal Dimension."
+  "message.orespawn.termite.empty_inventory": "Empty your inventory, including armor and offhand, before entering the Crystal Dimension.",
+  "entity.orespawn.crystal_cow": "Crystal Apple Cow",
+  "item.orespawn.crystal_apple": "Crystal Apple",
+  "item.orespawn.crystal_cow_egg": "Crystal Cow Spawn Egg",
+  "item.orespawn.crystal_cow_cage": "Caged Crystal Cow",
+  "block.orespawn.crystal_cow_ore": "Ancient Dried Crystal Cow Spawn Egg"
 }

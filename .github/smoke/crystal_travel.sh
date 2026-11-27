@@ -79,3 +79,25 @@ probar_cristal() {
     check "regreso de Cristal con el bloque recogido" 0
   fi
 }
+
+probar_vacas_cristal() {
+  comando "/execute in orespawn:crystal run fill 79 219 79 88 219 88 orespawn:crystal_grass"
+  comando "/execute in orespawn:crystal run tp @s 82.5 220 82.5 0 20"
+  comando "/gamemode survival"
+  xdotool key 1
+  for x in 82.5 84.5; do
+    comando "/summon orespawn:crystal_cow $x 220 84.5 {NoAI:1b,Tags:[\"familia\"]}"
+  done
+  comando "/item replace entity @s weapon.mainhand with minecraft:bucket"
+  xdotool click 3; sleep 2
+  check "la vaca de cristal adulta da leche" "$([ "$(cuenta '@s[nbt={Inventory:[{id:"minecraft:milk_bucket"}]}]')" -gt 0 ] && echo 1 || echo 0)"
+  comando "/item replace entity @s weapon.mainhand with minecraft:wheat 2"
+  for x in 82.5 84.5; do
+    comando "/tp @s $x 220 82.5 0 20"
+    xdotool click 3; sleep 2
+  done
+  local cria='@e[type=orespawn:crystal_cow,tag=!familia,y=220,x=83,z=84,distance=..5]'
+  check "dos vacas de cristal alimentadas con trigo producen una cría" "$([ "$(cuenta "$cria")" -eq 1 ] && echo 1 || echo 0)"
+  import -window root "shots/familia_cristal_llegada.png"
+  comando "/execute in minecraft:overworld run tp @s 82.5 80 82.5"
+}
