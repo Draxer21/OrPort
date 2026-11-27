@@ -262,9 +262,9 @@ def main():
         time.sleep(1)
     for x in range(36, 144, 8):
         for z in range(36, 144, 8):
-            surface = f"{crystal} positioned {x} 80 {z} positioned over world_surface"
+            surface = f"{crystal} positioned {x + 0.5} 80 {z + 0.5} positioned over world_surface"
             if "passed" in rc.cmd(f"{surface} if block ~ ~-1 ~ orespawn:crystal_grass if block ~ ~-2 ~ orespawn:crystal_stone"):
-                rc.cmd(f'{surface} run summon minecraft:marker ~0.5 ~ ~0.5 {{Tags:["crystal_sample"]}}')
+                rc.cmd(f'{surface} run summon minecraft:marker ~ ~ ~ {{Tags:["crystal_sample"]}}')
                 sample = (x, z)
                 break
         if sample:
