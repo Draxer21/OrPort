@@ -41,6 +41,14 @@ cuenta() {
   done
   echo "$out" | grep -oE "[0-9]+" || echo 0
 }
+esperar_chat() {
+  local desde=$1 texto=$2
+  for espera in 1 2 3 4 5 6 7 8; do
+    if tail -n +$((desde+1)) "$LOG" | grep -Fq "$texto"; then return 0; fi
+    sleep 1
+  done
+  return 1
+}
 fallos=0
 check() { if [ "$2" = 1 ]; then echo "[OK ] $1 ${3:-}"; else echo "[FALLO] $1 ${3:-}"; fallos=$((fallos + 1)); fi; }
 # Seleccionar una hormiga nacida en el mundo y mantener la misma bajo la mira.
@@ -51,12 +59,16 @@ clic_hormiga() {
   comando "/tag $cerca add $tag"
   comando "/clear @s"
   comando "/data merge entity $sel {NoAI:1b,NoGravity:1b,Motion:[0d,0d,0d]}"
-  # Cámara horizontal a la altura de los ojos. La caja de la hormiga mide 0,1.
-  comando "/fill ~-1 ~ ~ ~1 ~2 ~3 minecraft:air"
+  # Mantener la cámara fuera del alcance de los escorpiones de la escena inferior.
+  comando "/forceload add 80 80"
+  comando "/fill 80 209 80 86 209 86 minecraft:stone"
+  comando "/fill 80 210 80 86 213 86 minecraft:air"
+  comando "/tp $sel 82.5 211.57 84.5"
+  comando "/tp @s 82.5 210 82.5 0 0"
   linea=$(wc -l < "$LOG")
   for intento in 1 2 3; do
-    comando "/tp $sel ~ ~1.57 ~2"
-    comando "/tp @s ~ ~ ~ 0 0"
+    comando "/tp $sel 82.5 211.57 84.5"
+    comando "/tp @s 82.5 210 82.5 0 0"
     [ "$intento" = 1 ] && import -window root "shots/${tag}_antes.png"
     xdotool click 3
     for i in $(seq 1 12); do
@@ -64,7 +76,7 @@ clic_hormiga() {
         sleep 5
         local desde=$(wc -l < "$LOG")
         comando "/execute if dimension $destino if entity @s"
-        if tail -n +$((desde+1)) "$LOG" | grep -q 'Test passed'; then
+        if esperar_chat "$desde" 'Test passed'; then
           import -window root "shots/${tag}_despues.png"
           return 0
         fi

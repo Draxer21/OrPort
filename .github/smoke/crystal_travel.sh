@@ -85,7 +85,10 @@ probar_cristal() {
     done
   done
   if tail -n +$((linea+1)) "$LOG" | grep -q "viajó a minecraft:overworld con termite"; then
-    check "regreso de Cristal con el bloque recogido" "$([ "$(cuenta "$muestra")" -gt 0 ] && echo 1 || echo 0)"
+    sleep 5
+    desde=$(wc -l < "$LOG")
+    comando "/execute if dimension minecraft:overworld if items entity @s weapon.offhand orespawn:crystal_grass"
+    check "regreso de Cristal con el bloque recogido" "$(esperar_chat "$desde" 'Test passed' && echo 1 || echo 0)"
   else
     check "regreso de Cristal con el bloque recogido" 0
   fi

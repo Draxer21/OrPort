@@ -260,15 +260,28 @@ def main():
         if "passed" in rc.cmd(f"{crystal} if loaded 143 64 143"):
             break
         time.sleep(1)
-    for x in range(36, 144, 8):
-        for z in range(36, 144, 8):
-            surface = f"{crystal} positioned {x + 0.5} 80 {z + 0.5} positioned over world_surface"
-            if "passed" in rc.cmd(f"{surface} if block ~ ~-1 ~ orespawn:crystal_grass if block ~ ~-2 ~ orespawn:crystal_stone"):
-                rc.cmd(f'{surface} run summon minecraft:marker ~ ~ ~ {{Tags:["crystal_sample"]}}')
-                sample = (x, z)
+    def mark_sample(x, z):
+        surface = f"{crystal} positioned {x + 0.5} 80 {z + 0.5} positioned over world_surface"
+        if "passed" not in rc.cmd(f"{surface} if block ~ ~-1 ~ orespawn:crystal_grass if block ~ ~-2 ~ orespawn:crystal_stone"):
+            return False
+        return "Summoned" in rc.cmd(f'{surface} run summon minecraft:marker ~ ~ ~ {{Tags:["crystal_sample"]}}')
+
+    # Una semilla puede situar toda la primera zona bajo el océano.
+    sample = next(((x, z) for x in range(36, 144, 8) for z in range(36, 144, 8) if mark_sample(x, z)), None)
+    if sample is None:
+        for x in (-1024, -512, 512, 1024):
+            for z in (-1024, -512, 512, 1024):
+                rc.cmd(f"{crystal} run forceload add {x} {z}")
+                for _ in range(30):
+                    if "passed" in rc.cmd(f"{crystal} if loaded {x} 80 {z}"):
+                        break
+                    time.sleep(1)
+                sample = next(((x+dx, z+dz) for dx in (2, 8, 14) for dz in (2, 8, 14) if mark_sample(x+dx, z+dz)), None)
+                if sample:
+                    break
+                rc.cmd(f"{crystal} run forceload remove {x} {z}")
+            if sample:
                 break
-        if sample:
-            break
     check("césped natural sobre piedra de cristal", sample is not None, str(sample))
     rc.cmd("save-all flush")
     time.sleep(3)
