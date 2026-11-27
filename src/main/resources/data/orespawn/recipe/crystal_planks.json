@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "group": "planks",
+  "ingredients": [
+    "orespawn:crystal_log"
+  ],
+  "result": {
+    "id": "orespawn:crystal_planks",
+    "count": 4
+  }
+}

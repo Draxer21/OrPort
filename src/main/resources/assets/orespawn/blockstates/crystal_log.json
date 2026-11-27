@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=y": {
+      "model": "orespawn:block/crystal_log"
+    },
+    "axis=z": {
+      "model": "orespawn:block/crystal_log",
+      "x": 90
+    },
+    "axis=x": {
+      "model": "orespawn:block/crystal_log",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

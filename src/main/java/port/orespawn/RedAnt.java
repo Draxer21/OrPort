@@ -57,7 +57,7 @@ final class RedAnt extends Creatures.Creature {
      */
     static InteractionResult travel(ServerPlayer traveler,ResourceKey<Level> away,String antSpecies) {
         var from=traveler.level();
-        var dest=from.getServer().getLevel(from.dimension().equals(away) || from.dimension().equals(Butterfly.CHAOS) ? Level.OVERWORLD : away);
+        var dest=from.getServer().getLevel(from.dimension().equals(away) || (from.dimension().equals(Butterfly.CHAOS) && !away.equals(Termite.CRYSTAL)) ? Level.OVERWORLD : away);
         if (dest==null) return explain(traveler,"dimension");
         var origin=dest.getWorldBorder().clampToBounds(traveler.blockPosition());
         var pos=landing(dest,origin);

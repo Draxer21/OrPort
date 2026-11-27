@@ -291,5 +291,14 @@
   "block.orespawn.rainbow_ant_block": "Rainbow Ant Nest",
   "block.orespawn.unstable_ant_block": "Unstable Ant Nest",
   "biome.orespawn.villages": "Villages",
-  "biome.orespawn.danger": "Danger Dimension"
+  "biome.orespawn.danger": "Danger Dimension",
+  "block.orespawn.crystal_stone": "Crystal Stone",
+  "block.orespawn.crystal_grass": "Crystal Grass",
+  "block.orespawn.crystal_log": "Crystal Log",
+  "block.orespawn.crystal_leaves": "Crystal Leaves",
+  "block.orespawn.crystal_planks": "Crystal Planks",
+  "block.orespawn.crystal_coal_ore": "Crystal Coal Ore",
+  "block.orespawn.termite_nest": "Termite Nest",
+  "biome.orespawn.crystal": "Crystal Dimension",
+  "message.orespawn.termite.empty_inventory": "Empty your inventory, including armor and offhand, before entering the Crystal Dimension."
 }

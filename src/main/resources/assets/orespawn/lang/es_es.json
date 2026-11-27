@@ -291,5 +291,14 @@
   "block.orespawn.rainbow_ant_block": "Hormiguero arcoíris",
   "block.orespawn.unstable_ant_block": "Hormiguero inestable",
   "biome.orespawn.villages": "Aldeas",
-  "biome.orespawn.danger": "Dimensión peligrosa"
+  "biome.orespawn.danger": "Dimensión peligrosa",
+  "block.orespawn.crystal_stone": "Piedra de cristal",
+  "block.orespawn.crystal_grass": "Césped de cristal",
+  "block.orespawn.crystal_log": "Tronco de cristal",
+  "block.orespawn.crystal_leaves": "Hojas de cristal",
+  "block.orespawn.crystal_planks": "Tablones de cristal",
+  "block.orespawn.crystal_coal_ore": "Mena de carbón de cristal",
+  "block.orespawn.termite_nest": "Termitero",
+  "biome.orespawn.crystal": "Dimensión de Cristal",
+  "message.orespawn.termite.empty_inventory": "Vacía el inventario, incluida la armadura y la mano secundaria, antes de entrar en la dimensión de Cristal."
 }

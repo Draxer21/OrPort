@@ -41,74 +41,78 @@ cuenta() {
   done
   echo "$out" | grep -oE "[0-9]+" || echo 0
 }
+esperar_chat() {
+  local desde=$1 texto=$2
+  for espera in 1 2 3 4 5 6 7 8; do
+    if tail -n +$((desde+1)) "$LOG" | grep -Fq "$texto"; then return 0; fi
+    sleep 1
+  done
+  return 1
+}
 fallos=0
 check() { if [ "$2" = 1 ]; then echo "[OK ] $1 ${3:-}"; else echo "[FALLO] $1 ${3:-}"; fallos=$((fallos + 1)); fi; }
-# Inmoviliza la hormiga más cercana de la especie y coloca al jugador 1,5 bloques al norte, mirándola.
-congelar() {
+# Seleccionar una hormiga nacida en el mundo y mantener la misma bajo la mira.
+clic_hormiga() {
+  local ant=$1 destino=$2 tag=$3 linea intento
+  local cerca="@e[type=orespawn:$ant,distance=..48,sort=nearest,limit=1]"
+  local sel="@e[type=orespawn:$ant,tag=$tag,limit=1]"
+  comando "/tag $cerca add $tag"
   comando "/clear @s"
-  comando "/effect give @e[type=orespawn:$1,distance=..64,sort=nearest,limit=1] minecraft:slowness 600 255 true"
-  sleep 4
-}
-# Lee la posición de la hormiga inmóvil y coloca al jugador 1,5 bloques al norte, mirándola.
-apuntar() {
-  local sel="@e[type=orespawn:$1,distance=..64,sort=nearest,limit=1]"
-  local before=$(wc -l < $LOG)
-  comando "/data get entity $sel Pos"
-  sleep 1
-  local pos=$(tail -n +$((before + 1)) $LOG | grep -oE "\[-?[0-9.]+d, -?[0-9.]+d, -?[0-9.]+d\]" | tail -1 | tr -d '[]d,')
-  read -r ax ay az <<< "$pos"
-  if [ -z "${az:-}" ]; then echo "no se pudo leer la posición de la hormiga"; return 1; fi
-  echo "hormiga en $ax $ay $az"
-  if [ "${2:-}" = nivelar ]; then
-    # Solo cámara: suelo llano y aire entre el jugador y la hormiga para que el clic no dé en una ladera.
-    local bx=${ax%.*} by=${ay%.*} bz=${az%.*}
-    comando "/fill $((bx - 2)) $((by - 1)) $((bz - 3)) $((bx + 2)) $((by - 1)) $((bz + 1)) minecraft:grass_block"
-    comando "/fill $((bx - 2)) $by $((bz - 3)) $((bx + 2)) $((by + 2)) $((bz + 1)) minecraft:air"
-  fi
-  comando "/tp @s $ax $ay $(python3 -c "print($az - 1.5)") 0 46.3"
-  sleep 4
-}
-clic() {
-  local ant=$1 expect=$2 tag=$3 modo=${4:-}
-  local before=$(grep -c "viajó a $expect" $LOG) ok=1
-  for intento in 1 2 3 4; do
-    [ "$(grep -c "viajó a $expect" $LOG)" -gt "$before" ] && { ok=0; break; }
-    apuntar $ant $modo || { sleep 5; continue; }
-    [ $intento = 1 ] && import -window root "shots/${tag}_antes.png"
-    xdotool mousemove 640 360 click 3
+  comando "/data merge entity $sel {NoAI:1b,NoGravity:1b,Motion:[0d,0d,0d]}"
+  # Mantener la cámara fuera del alcance de los escorpiones de la escena inferior.
+  comando "/forceload add 80 80"
+  comando "/fill 80 209 80 86 209 86 minecraft:stone"
+  comando "/fill 80 210 80 86 213 86 minecraft:air"
+  comando "/tp $sel 82.5 211.57 84.5"
+  comando "/tp @s 82.5 210 82.5 0 0"
+  linea=$(wc -l < "$LOG")
+  for intento in 1 2 3; do
+    comando "/tp $sel 82.5 211.57 84.5"
+    comando "/tp @s 82.5 210 82.5 0 0"
+    [ "$intento" = 1 ] && import -window root "shots/${tag}_antes.png"
+    xdotool click 3
     for i in $(seq 1 12); do
-      [ "$(grep -c "viajó a $expect" $LOG)" -gt "$before" ] && { ok=0; break; }
+      if tail -n +$((linea+1)) "$LOG" | grep -q "viajó a $destino con $ant"; then
+        sleep 5
+        local desde=$(wc -l < "$LOG")
+        comando "/execute if dimension $destino if entity @s"
+        if esperar_chat "$desde" 'Test passed'; then
+          import -window root "shots/${tag}_despues.png"
+          return 0
+        fi
+        return 1
+      fi
       sleep 2
     done
-    [ $ok = 0 ] && { echo "clic aceptado en el intento $intento"; break; }
   done
-  # Tiempo para que el cliente cargue la dimensión antes de volver a usar el chat.
-  sleep 20
-  import -window root "shots/${tag}_despues.png"
-  return $ok
+  return 1
 }
+
 viaje() {
-  local ant=$1 dim=$2 nx=$3 tag=$4
-  # Jugador junto al hormiguero (x=$nx, z=26), sin hormigas de esa especie en el mundo.
+  local ant=$1 dim=$2 nx=$3 tag=$4 nacidas vuelta
   comando "/execute in minecraft:overworld run tp @s $nx -60 22 0 30"
   sleep 8
-  comando "/gamerule random_tick_speed 1024"
-  sleep 6
-  comando "/gamerule random_tick_speed 3"
-  local nacidas=$(cuenta "@e[type=orespawn:$ant,distance=..20]")
-  check "$tag: el hormiguero genera hormigas con el jugador cerca" $([ "$nacidas" -ge 1 ] && echo 1 || echo 0) "hormigas=$nacidas"
+  # Un nido ya colocado puede estar entre dos tandas (hasta 600 ticks).
+  for espera in 1 2 3 4 5 6; do
+    nacidas=$(cuenta "@e[type=orespawn:$ant,distance=..20]")
+    [ "$nacidas" -ge 1 ] && break
+    sleep 4
+  done
+  check "$tag: hormigas del hormiguero a velocidad normal" "$([ "$nacidas" -ge 1 ] && echo 1 || echo 0)" "hormigas=$nacidas"
   [ "$nacidas" -ge 1 ] || return
-  congelar $ant
-  clic $ant "$dim" "${tag}_ida"; check "$tag: ida a $dim con una hormiga del hormiguero" $([ $? = 0 ] && echo 1 || echo 0)
-  sleep 4
-  # En el destino no había ninguna hormiga de esta especie; la de vuelta pudo alejarse mientras cargaba.
-  grep -o "Hormiga de vuelta $ant en $dim.*" $LOG | tail -1
-  local vuelta=$(cuenta "@e[type=orespawn:$ant,distance=..48]")
-  check "$tag: aparece una hormiga de vuelta al llegar" $([ "$vuelta" -ge 1 ] && echo 1 || echo 0) "hormigas=$vuelta"
+  if ! clic_hormiga "$ant" "$dim" "${tag}_ida"; then
+    check "$tag: ida a $dim" 0; return
+  fi
+  check "$tag: ida a $dim" 1
+  vuelta=$(cuenta "@e[type=orespawn:$ant,distance=..48]")
+  check "$tag: hormiga de regreso en $dim" "$([ "$vuelta" -ge 1 ] && echo 1 || echo 0)" "hormigas=$vuelta"
   [ "$vuelta" -ge 1 ] || return
   import -window root "shots/${tag}_llegada.png"
-  congelar $ant
-  clic $ant "minecraft:overworld" "${tag}_vuelta" nivelar; check "$tag: regreso al mundo principal con esa hormiga" $([ $? = 0 ] && echo 1 || echo 0)
+  if clic_hormiga "$ant" minecraft:overworld "${tag}_vuelta"; then
+    check "$tag: regreso al Overworld" 1
+  else
+    check "$tag: regreso al Overworld" 0
+  fi
 }
 # Cliente real, escena aislada: la línea de visión debe atravesar la caja de la mariposa.
 apuntar_mariposa() {
@@ -135,6 +139,7 @@ probar_mariposa() {
   comando "/gamemode survival"
   comando "/effect give @s minecraft:resistance 600 4 true"
   comando "/clear @s"
+  comando "/execute in minecraft:overworld run tp @s 82.5 80 82.5"
   comando "/forceload add 80 80"
   comando "/fill 80 79 80 86 79 86 minecraft:stone"
   comando "/tp @s 82.5 80 82.5 0 0"
@@ -166,6 +171,8 @@ probar_mariposa() {
 }
 if [ $joined = 1 ]; then
   sleep 20
+  source .github/smoke/crystal_travel.sh
+  probar_cristal
   probar_mariposa
   antes=$(cuenta "@e[type=orespawn:rainbow_ant]"); antes2=$(cuenta "@e[type=orespawn:unstable_ant]")
   # El servidor ya comprobó que no quedó ninguna hormiga preparada; las que haya aquí salieron de los

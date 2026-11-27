@@ -49,6 +49,7 @@ public final class OreSpawn {
         armor("amethyst", 100, 12, 4, 8, 7, 3);
         for (String[] nest : new String[][]{{"ant_block", "red_ant"}, {"rainbow_ant_block", "rainbow_ant"}, {"unstable_ant_block", "unstable_ant"}})
             ITEMS.registerSimpleBlockItem(BLOCKS.registerBlock(nest[0], p -> new AntNest(p, nest[1]), p -> p.strength(0.6f).randomTicks()));
+        CrystalBlocks.register();
         Landscape.register(bus);
         CritterCage.register();
         Creatures.register(bus);
