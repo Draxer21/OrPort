@@ -219,6 +219,15 @@ def main():
     ants = count(rc, "@e[type=orespawn:rainbow_ant]") + count(rc, "@e[type=orespawn:unstable_ant]")
     check("hormigueros colocados y ninguna hormiga preparada", nests.count("passed") == 2 and ants == 0, f"hormigas={ants}")
 
+    # Ambos nidos deben funcionar incluso bajo techo y sin acelerar los ticks.
+    for x in (20, 230):
+        rc.cmd(f"fill {x - 3} {Y + 3} 23 {x + 3} {Y + 3} 29 minecraft:stone")
+    time.sleep(7)
+    for mob, x in (("rainbow_ant", 20), ("unstable_ant", 230)):
+        emerged = count(rc, f"@e[type=orespawn:{mob},x={x},y={Y},z=26,distance=..16]")
+        check(f"{mob} sale del nido colocado", emerged >= 1, f"hormigas={emerged}")
+        rc.cmd(f"fill {x - 3} {Y + 3} 23 {x + 3} {Y + 3} 29 air")
+
     # 9. Los escorpiones ignoran a las tres hormigas, como en el clásico (familia EntityAnt)
     for mob, x in (("scorpion", 50), ("emperor_scorpion", -50)):
         rc.cmd(f"summon orespawn:{mob} {x} {Y} -32")
