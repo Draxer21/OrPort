@@ -112,6 +112,38 @@ viaje() {
 }
 if [ $joined = 1 ]; then
   sleep 20
+  # Inmovilizar las mariposas para poder apuntar con el cliente de CI. La de vuelta la genera el mod.
+  comando "/gamemode survival"
+  comando "/effect give @s minecraft:resistance 600 4 true"
+  comando "/clear @s"
+  comando "/tp @s 20.5 -60 22 0 0"
+  comando '/summon orespawn:butterfly 20.5 -59 24 {NoAI:1b,NoGravity:1b,Tags:["chaos_test"]}'
+  comando "/tp @s ~ ~ ~ facing entity @e[tag=chaos_test,limit=1] eyes"
+  comando "/item replace entity @s weapon.mainhand with minecraft:stick"
+  antes_objeto=$(wc -l < "$LOG")
+  xdotool click 3; sleep 2
+  local_dim=$(cuenta '@s[gamemode=survival,x=20.5,y=-60,z=22,distance=..2]')
+  check "mariposa: con objeto permanece en el Overworld" $([ "$local_dim" -ge 1 ] && ! tail -n +$((antes_objeto+1)) "$LOG" | grep -q "viajó a orespawn:chaos" && echo 1 || echo 0)
+  comando "/clear @s"
+  antes_caos=$(wc -l < "$LOG")
+  xdotool click 3
+  for i in $(seq 1 30); do tail -n +$((antes_caos+1)) "$LOG" | grep -q "viajó a orespawn:chaos con butterfly" && break; sleep 2; done
+  if tail -n +$((antes_caos+1)) "$LOG" | grep -q "viajó a orespawn:chaos con butterfly"; then
+    check "mariposa: ida a Caos" 1
+    sleep 5
+    sel="@e[type=orespawn:butterfly,distance=..48,sort=nearest,limit=1]"
+    comando "/data merge entity $sel {NoAI:1b,NoGravity:1b}"
+    vuelta=$(cuenta "$sel")
+    check "mariposa de regreso cerca de la llegada" $([ "$vuelta" -ge 1 ] && echo 1 || echo 0)
+    comando "/tp $sel ~ ~1.98 ~"
+    comando "/tp @s ~ ~ ~ 0 -90"
+    antes_regreso=$(wc -l < "$LOG")
+    xdotool click 3
+    for i in $(seq 1 30); do tail -n +$((antes_regreso+1)) "$LOG" | grep -q "viajó a minecraft:overworld con butterfly" && break; sleep 2; done
+    check "mariposa: regreso al Overworld" $(tail -n +$((antes_regreso+1)) "$LOG" | grep -q "viajó a minecraft:overworld con butterfly" && echo 1 || echo 0)
+  else
+    check "mariposa: ida a Caos" 0
+  fi
   antes=$(cuenta "@e[type=orespawn:rainbow_ant]"); antes2=$(cuenta "@e[type=orespawn:unstable_ant]")
   # El servidor ya comprobó que no quedó ninguna hormiga preparada; las que haya aquí salieron de los
   # hormigueros con la velocidad de ticks normal mientras el cliente cargaba.

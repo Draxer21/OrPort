@@ -46,7 +46,7 @@ final class RedAnt extends Creatures.Creature {
         if (hand!=InteractionHand.MAIN_HAND || !player.getItemInHand(hand).isEmpty()) return super.mobInteract(player,hand);
         if (!(player instanceof ServerPlayer traveler)) return InteractionResult.SUCCESS;
         var from=traveler.level().dimension();
-        if (!from.equals(MINING) && !from.equals(Level.OVERWORLD)) return InteractionResult.PASS;
+        if (!from.equals(MINING) && !from.equals(Level.OVERWORLD) && !from.equals(Butterfly.CHAOS)) return InteractionResult.PASS;
         return travel(traveler,MINING,"red_ant");
     }
 
@@ -57,10 +57,11 @@ final class RedAnt extends Creatures.Creature {
      */
     static InteractionResult travel(ServerPlayer traveler,ResourceKey<Level> away,String antSpecies) {
         var from=traveler.level();
-        var dest=from.getServer().getLevel(from.dimension().equals(away)?Level.OVERWORLD:away);
+        var dest=from.getServer().getLevel(from.dimension().equals(away) || from.dimension().equals(Butterfly.CHAOS) ? Level.OVERWORLD : away);
         if (dest==null) return explain(traveler,"dimension");
         var origin=dest.getWorldBorder().clampToBounds(traveler.blockPosition());
         var pos=landing(dest,origin);
+        if (pos == null && dest.dimension().equals(Butterfly.CHAOS)) pos = chaosLanding(dest, origin);
         if (pos==null) return explain(traveler,"terrain");
         var antType=Creatures.SPECIES.get(antSpecies).type().get();
         if (dest.dimension().equals(away) && dest.getEntitiesOfClass(Creatures.Creature.class,new AABB(pos).inflate(6),e->e.isAlive() && e.getType()==antType).isEmpty()) {
@@ -81,6 +82,27 @@ final class RedAnt extends Creatures.Creature {
         player.sendSystemMessage(Component.translatable("message.orespawn.ant."+problem));
         return InteractionResult.FAIL;
     }
+    private static BlockPos chaosLanding(ServerLevel level, BlockPos origin) {
+        // Probe a few distant columns before resorting to a ledge over open void.
+        for (int radius = 32; radius <= 128; radius *= 2) {
+            for (Direction side : Direction.Plane.HORIZONTAL) {
+                var column = origin.relative(side, radius);
+                if (!level.getWorldBorder().isWithinBounds(column)) continue;
+                if (level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, column.getX(), column.getZ()) <= level.getMinY()) continue;
+                var island = landing(level, column);
+                if (island != null) return island;
+            }
+        }
+        var center = new BlockPos(origin.getX(), 80, origin.getZ());
+        if (!level.isEmptyBlock(center.above()) || !level.isEmptyBlock(center.above(2))) return null;
+        for (var floor : BlockPos.betweenClosed(center.offset(-1, 0, -1), center.offset(1, 0, 1))) {
+            if (level.getWorldBorder().isWithinBounds(floor) && level.isEmptyBlock(floor)) {
+                level.setBlockAndUpdate(floor, Blocks.COBBLESTONE.defaultBlockState());
+            }
+        }
+        return level.getBlockState(center).is(Blocks.COBBLESTONE) ? center.above() : null;
+    }
+
     private static BlockPos landing(ServerLevel level,BlockPos origin) {
         BlockPos water=null;
         for(int r=0;r<=16;r++) for(int x=-r;x<=r;x++) for(int z=-r;z<=r;z++) {
