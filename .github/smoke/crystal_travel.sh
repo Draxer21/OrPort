@@ -63,15 +63,26 @@ probar_cristal() {
   sleep 2
   local muestra='@s[nbt={Inventory:[{id:"orespawn:crystal_grass"}]}]'
   check "recoge césped de cristal con la mano" "$([ "$(cuenta "$muestra")" -gt 0 ] && echo 1 || echo 0)"
-  xdotool key 2
+  # Pasar el bloque recogido a la mano secundaria y comprobar que la principal queda libre.
+  xdotool key 1; sleep 1; xdotool key f; sleep 1
+  local desde=$(wc -l < "$LOG")
+  comando "/execute unless items entity @s weapon.mainhand * if items entity @s weapon.offhand orespawn:crystal_grass"
+  if ! tail -n +$((desde+1)) "$LOG" | grep -q 'Test passed'; then
+    check "mano vacía y botín conservado antes de regresar" 0; return
+  fi
+  # Evitar laderas, agua y criaturas que tapen el clic. Solo se prepara la cámara en Cristal.
+  comando "/fill 80 209 80 86 209 86 orespawn:crystal_stone"
+  comando "/fill 80 210 80 86 213 86 minecraft:air"
+  comando "/tp @s 82.5 210 82.5 0 0"
   sel='@e[type=orespawn:termite,tag=crystal_return,limit=1]'
-  comando "/fill ~-1 ~ ~ ~1 ~2 ~3 minecraft:air"
-  apuntar_termita "$sel"
   linea=$(wc -l < "$LOG")
-  xdotool click 3
-  for i in $(seq 1 30); do
-    if tail -n +$((linea+1)) "$LOG" | grep -q "viajó a minecraft:overworld con termite"; then break; fi
-    sleep 2
+  for intento in 1 2 3; do
+    apuntar_termita "$sel"
+    xdotool click 3
+    for i in $(seq 1 12); do
+      if tail -n +$((linea+1)) "$LOG" | grep -q "viajó a minecraft:overworld con termite"; then break 2; fi
+      sleep 2
+    done
   done
   if tail -n +$((linea+1)) "$LOG" | grep -q "viajó a minecraft:overworld con termite"; then
     check "regreso de Cristal con el bloque recogido" "$([ "$(cuenta "$muestra")" -gt 0 ] && echo 1 || echo 0)"

@@ -80,7 +80,12 @@ viaje() {
   local ant=$1 dim=$2 nx=$3 tag=$4 nacidas vuelta
   comando "/execute in minecraft:overworld run tp @s $nx -60 22 0 30"
   sleep 8
-  nacidas=$(cuenta "@e[type=orespawn:$ant,distance=..20]")
+  # Un nido ya colocado puede estar entre dos tandas (hasta 600 ticks).
+  for espera in 1 2 3 4 5 6; do
+    nacidas=$(cuenta "@e[type=orespawn:$ant,distance=..20]")
+    [ "$nacidas" -ge 1 ] && break
+    sleep 4
+  done
   check "$tag: hormigas del hormiguero a velocidad normal" "$([ "$nacidas" -ge 1 ] && echo 1 || echo 0)" "hormigas=$nacidas"
   [ "$nacidas" -ge 1 ] || return
   if ! clic_hormiga "$ant" "$dim" "${tag}_ida"; then
@@ -122,8 +127,9 @@ probar_mariposa() {
   comando "/gamemode survival"
   comando "/effect give @s minecraft:resistance 600 4 true"
   comando "/clear @s"
+  comando "/execute in minecraft:overworld run tp @s 82.5 80 82.5"
   comando "/forceload add 80 80"
-  comando "/fill 80 79 80 86 79 86 minecraft:stone"
+  comando "/fill 80 79 80" 86 79 86 minecraft:stone"
   comando "/tp @s 82.5 80 82.5 0 0"
   comando '/summon orespawn:butterfly 82.5 81.43 84.5 {NoAI:1b,NoGravity:1b,Tags:["chaos_test"]}'
   sel='@e[type=orespawn:butterfly,tag=chaos_test,limit=1]'
