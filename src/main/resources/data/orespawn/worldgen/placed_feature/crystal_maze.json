@@ -1,0 +1,8 @@
+{
+  "feature": "orespawn:crystal_maze",
+  "placement": [
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

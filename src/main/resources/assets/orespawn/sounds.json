@@ -451,5 +451,19 @@
     "sounds": [
       "orespawn:scorpion_living"
     ]
+  },
+  "entity.dungeon_beast.hurt": {
+    "subtitle": "subtitles.orespawn.entity.dungeon_beast.hurt",
+    "sounds": [
+      "orespawn:dbhit1",
+      "orespawn:dbhit2",
+      "orespawn:dbhit3"
+    ]
+  },
+  "entity.dungeon_beast.death": {
+    "subtitle": "subtitles.orespawn.entity.dungeon_beast.death",
+    "sounds": [
+      "orespawn:dbdead"
+    ]
   }
 }

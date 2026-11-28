@@ -3,7 +3,7 @@ loaderVersion="[1,)"
 license="See original OreSpawn distribution"
 [[mods]]
 modId="orespawn"
-version="0.3.8"
+version="0.3.9"
 displayName="OreSpawn 26.2 (port experimental)"
 description="Minerals, fossil ores and equipment from ConquerantFix."
 [[dependencies.orespawn]]

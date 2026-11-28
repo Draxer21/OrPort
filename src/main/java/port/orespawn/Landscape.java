@@ -25,6 +25,7 @@ final class Landscape {
         var features = DeferredRegister.<Feature<?>>create(Registries.FEATURE, "orespawn");
         features.register("mining_dungeon", () -> new Dungeon());
         features.register("scraggly_tree", () -> new ScragglyTree());
+        features.register("crystal_maze", CrystalMaze::new);
         features.register(bus);
         for (String name : new String[]{"corn","butterfly","mosquito","firefly","moth"}) {
             var crop = OreSpawn.BLOCKS.registerBlock(name+"_plant", p -> new Plant(p, name), p -> p.noCollision().noOcclusion().randomTicks().instabreak().sound(SoundType.CROP));

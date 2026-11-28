@@ -24,7 +24,7 @@ public final class OreSpawn {
             ITEMS.registerSimpleBlockItem(BLOCKS.registerSimpleBlock(id,
                 p -> p.strength(5, 5).requiresCorrectToolForDrops().lightLevel(s -> 3)));
         }
-        for (String id : new String[]{"alosaurus_ore", "baryonyx_ore", "camarasaurus_ore", "cryolophosaurus_ore", "pointysaurus_ore", "trex_ore", "cow_ore", "creeper_ore", "ghast_ore", "horse_ore", "pig_ore", "zombie_ore", "bird_ore", "alien_ore", "cavefisher_ore", "nastysaurus_ore", "velocityraptor_ore", "gammametroid_ore", "spyro_ore", "dragonfly_ore", "smallworm_ore", "mediumworm_ore", "largeworm_ore", "doomworm_ore", "scorpion_ore", "emperor_scorpion_ore", "basilisk_ore", "mantis_ore", "beaver_ore", "brutalfly_ore", "kyuubi_ore", "mothra_ore", "cassowary_ore", "redcow_ore", "crystal_cow_ore", "stinkbug_ore"}) {
+        for (String id : new String[]{"alosaurus_ore", "baryonyx_ore", "camarasaurus_ore", "cryolophosaurus_ore", "pointysaurus_ore", "trex_ore", "cow_ore", "creeper_ore", "ghast_ore", "horse_ore", "pig_ore", "zombie_ore", "bird_ore", "alien_ore", "cavefisher_ore", "nastysaurus_ore", "velocityraptor_ore", "gammametroid_ore", "spyro_ore", "dragonfly_ore", "smallworm_ore", "mediumworm_ore", "largeworm_ore", "doomworm_ore", "scorpion_ore", "emperor_scorpion_ore", "basilisk_ore", "mantis_ore", "beaver_ore", "brutalfly_ore", "kyuubi_ore", "mothra_ore", "cassowary_ore", "redcow_ore", "crystal_cow_ore", "dungeon_beast_ore", "stinkbug_ore"}) {
             ITEMS.registerSimpleBlockItem(BLOCKS.registerSimpleBlock(id, p -> p.strength(0.5f, 1)));
         }
         for (String part : new String[]{"big_bertha_blade","big_bertha_guard","big_bertha_handle"}) ITEMS.registerSimpleItem(part);
@@ -33,6 +33,7 @@ public final class OreSpawn {
         ITEMS.registerSimpleItem("popcorn", p -> p.food(new net.minecraft.world.food.FoodProperties.Builder().nutrition(4).saturationModifier(0.4f).build()));
         ITEMS.registerItem("ultimate_bow",BowItem::new,p->p.durability(3000).enchantable(25));
         ITEMS.registerSimpleItem("emperor_scorpion_scale");
+        ITEMS.registerSimpleItem("pink_tourmaline");
         ITEMS.registerSimpleItem("basilisk_scale");
         ITEMS.registerSimpleItem("green_goo");
         ITEMS.registerItem("big_hammer",BigHammer::new);

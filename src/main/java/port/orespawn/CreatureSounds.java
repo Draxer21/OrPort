@@ -6,7 +6,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 final class CreatureSounds {
     private static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(Registries.SOUND_EVENT,"orespawn");
     static void register(IEventBus bus) {
-        for (String name : new String[]{"entity.basilisk.ambient",
+        for (String name : new String[]{"entity.dungeon_beast.hurt", "entity.dungeon_beast.death", "entity.basilisk.ambient",
             "entity.basilisk.hurt",
             "entity.basilisk.death",
             "entity.scorpion.attack",

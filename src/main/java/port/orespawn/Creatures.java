@@ -60,6 +60,7 @@ public final class Creatures {
         add("beaver", 0.6f, 0.8f, 15, 0.15, 1.0, false, "beaver_egg");
         add("cassowary", 0.5f, 1.2f, 10, 0.25, 8.0, false, "cassowary_egg");
         add("termite", 0.2f, 0.2f, 5, 0.2, 2.0, false, "termite_egg");
+        add("dungeon_beast", 1.15f, 1.1f, 65, 0.29, 12, true, "dungeon_beast_egg");
         add("crystal_cow", 0.9f, 1.4f, 10, 0.2, 0, false, "crystal_cow_egg");
         add("redcow", 0.8f, 0.8f, 10, 0.25, 2, false, "redcow_egg");
         add("stinkbug", 0.55f, 0.55f, 5, 0.15, 0.0, false, "stinkbug_egg");
@@ -83,6 +84,7 @@ public final class Creatures {
             case "red_ant" -> RedAnt::new;
             case "rainbow_ant", "unstable_ant" -> TravelAnt::new;
             case "doom_worm" -> DoomWorm::new;
+            case "dungeon_beast" -> DungeonBeast::new;
             case "crystal_cow" -> CrystalCow::new;
             case "redcow","baryonyx" -> BreedingCreature::new;
             default -> Companion.supports(id)?Companion::new:Creature::new;
@@ -93,11 +95,13 @@ public final class Creatures {
         if (egg != null) OreSpawn.ITEMS.registerItem(egg, SpawnEggItem::new, p -> p.spawnEgg(type.get()));
     }
     private static void placements(net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent event) {
-        SPECIES.forEach((id, data) -> event.register(data.type.get(), SpawnPlacementTypes.ON_GROUND,
+        SPECIES.forEach((id, data) -> event.register(data.type.get(),
+            id.equals("dungeon_beast") ? SpawnPlacementTypes.NO_RESTRICTIONS : SpawnPlacementTypes.ON_GROUND,
             net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
             switch (id) {
                 case "scorpion" -> Scorpion::canSpawn;
                 case "emperor_scorpion" -> Scorpion::canSpawnEmperor;
+                case "dungeon_beast" -> DungeonBeast::canSpawn;
                 case "mantis" -> Creatures::canSpawnMantis;
                 default -> Mob::checkMobSpawnRules;
             },
@@ -113,7 +117,7 @@ public final class Creatures {
     private static void attributes(EntityAttributeCreationEvent event) {
         SPECIES.forEach((id,data)->event.put(data.type.get(), Mob.createMobAttributes()
             .add(Attributes.MAX_HEALTH, data.health).add(Attributes.MOVEMENT_SPEED, data.speed)
-            .add(Attributes.ARMOR, switch(id){case "trex" -> 14; case "hercules_beetle" -> 19; case "scorpion" -> 10; case "emperor_scorpion" -> 20; case "basilisk" -> 15; case "triffid" -> 12; case "mantis" -> 10; case "mothra" -> 8; case "brutalfly" -> 6; default -> 0;})
+            .add(Attributes.ARMOR, switch(id){case "trex" -> 14; case "hercules_beetle" -> 19; case "scorpion" -> 10; case "emperor_scorpion" -> 20; case "basilisk" -> 15; case "triffid" -> 12; case "mantis" -> 10; case "mothra" -> 8; case "brutalfly", "dungeon_beast" -> 6; default -> 0;})
             .add(Attributes.FOLLOW_RANGE, switch(id){case "scorpion" -> 8; case "emperor_scorpion" -> 24; default -> 16;})
             .add(Attributes.TEMPT_RANGE, 10).add(Attributes.FLYING_SPEED, data.speed).add(Attributes.ATTACK_DAMAGE, data.damage).build()));
     }
@@ -142,6 +146,7 @@ public final class Creatures {
         @Override protected net.minecraft.sounds.SoundEvent getHurtSound(net.minecraft.world.damagesource.DamageSource cause) {
             String sound = switch (net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(getType()).getPath()) {
                 case "basilisk" -> "entity.basilisk.hurt";
+                case "dungeon_beast" -> "entity.dungeon_beast.hurt";
                 case "scorpion" -> "entity.scorpion.hit";
                 case "emperor_scorpion" -> "entity.basilisk.hurt";
                 case "alosaurus" -> "entity.alosaurus.hurt";
@@ -167,6 +172,7 @@ public final class Creatures {
         @Override protected net.minecraft.sounds.SoundEvent getDeathSound() {
             String sound = switch (net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(getType()).getPath()) {
                 case "basilisk" -> "entity.basilisk.death";
+                case "dungeon_beast" -> "entity.dungeon_beast.death";
                 case "scorpion" -> "entity.cryo.death";
                 case "emperor_scorpion" -> "entity.basilisk.death";
                 case "alosaurus" -> "entity.alosaurus.death";

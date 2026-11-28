@@ -1,0 +1,44 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "orespawn:pink_tourmaline"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "orespawn:crystal_apple"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:oak_log"
+        },
+        {
+          "type": "minecraft:empty"
+        }
+      ],
+      "functions": [
+        {
+          "function": "minecraft:set_count",
+          "count": {
+            "type": "minecraft:uniform",
+            "min": 0,
+            "max": 2
+          }
+        },
+        {
+          "function": "minecraft:enchanted_count_increase",
+          "enchantment": "minecraft:looting",
+          "count": {
+            "type": "minecraft:uniform",
+            "min": 0,
+            "max": 1
+          }
+        }
+      ]
+    }
+  ]
+}
