@@ -58,7 +58,9 @@ clic_hormiga() {
   local sel="@e[type=orespawn:$ant,tag=$tag,limit=1]"
   comando "/tag $cerca add $tag"
   comando "/clear @s"
-  comando "/data merge entity $sel {NoAI:1b,NoGravity:1b,Motion:[0d,0d,0d]}"
+  # El jugador y la hormiga se trasladan en ticks distintos. Conservar el ejemplar
+  # natural al separarlos más de 128 bloques durante la preparación de la cámara.
+  comando "/data merge entity $sel {PersistenceRequired:1b,NoAI:1b,NoGravity:1b,Motion:[0d,0d,0d]}"
   # Mantener la cámara fuera del alcance de los escorpiones de la escena inferior.
   comando "/forceload add 80 80"
   comando "/fill 80 209 80 86 209 86 minecraft:stone"
