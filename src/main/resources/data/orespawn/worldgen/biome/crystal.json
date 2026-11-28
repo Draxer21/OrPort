@@ -17,7 +17,8 @@
     [
       "orespawn:crystal_coal",
       "orespawn:crystal_tigerseye",
-      "orespawn:crystal_cow_ore"
+      "orespawn:crystal_cow_ore",
+      "orespawn:dungeon_beast_ore"
     ],
     [],
     [],
@@ -25,7 +26,9 @@
       "orespawn:crystal_tree",
       "orespawn:termite_nest"
     ],
-    []
+    [
+      "orespawn:crystal_maze"
+    ]
   ],
   "has_precipitation": true,
   "spawn_costs": {},
@@ -53,6 +56,12 @@
         "weight": 1,
         "minCount": 1,
         "maxCount": 1
+      },
+      {
+        "type": "orespawn:dungeon_beast",
+        "weight": 30,
+        "minCount": 4,
+        "maxCount": 6
       }
     ],
     "underground_water_creature": [],

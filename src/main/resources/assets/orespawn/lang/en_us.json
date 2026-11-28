@@ -305,5 +305,12 @@
   "item.orespawn.crystal_apple": "Crystal Apple",
   "item.orespawn.crystal_cow_egg": "Crystal Cow Spawn Egg",
   "item.orespawn.crystal_cow_cage": "Caged Crystal Cow",
-  "block.orespawn.crystal_cow_ore": "Ancient Dried Crystal Cow Spawn Egg"
+  "block.orespawn.crystal_cow_ore": "Ancient Dried Crystal Cow Spawn Egg",
+  "entity.orespawn.dungeon_beast": "Dungeon Beast",
+  "item.orespawn.dungeon_beast_egg": "Dungeon Beast Spawn Egg",
+  "block.orespawn.dungeon_beast_ore": "Dungeon Beast Fossil",
+  "item.orespawn.dungeon_beast_cage": "Caged Dungeon Beast",
+  "item.orespawn.pink_tourmaline": "Pink Tourmaline Ingot",
+  "subtitles.orespawn.entity.dungeon_beast.hurt": "Dungeon Beast hurts",
+  "subtitles.orespawn.entity.dungeon_beast.death": "Dungeon Beast dies"
 }

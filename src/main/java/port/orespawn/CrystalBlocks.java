@@ -5,11 +5,13 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.TintedParticleLeavesBlock;
 
 final class CrystalBlocks {
+    static final net.neoforged.neoforge.registries.DeferredBlock<net.minecraft.world.level.block.Block> STONE =
+        OreSpawn.BLOCKS.registerSimpleBlock("crystal_stone", p -> p.strength(1.5f, 6).requiresCorrectToolForDrops());
+
     static void register() {
         var blocks = OreSpawn.BLOCKS;
         var items = OreSpawn.ITEMS;
-        items.registerSimpleBlockItem(blocks.registerSimpleBlock("crystal_stone",
-            p -> p.strength(1.5f, 6).requiresCorrectToolForDrops()));
+        items.registerSimpleBlockItem(STONE);
         items.registerSimpleBlockItem(blocks.registerSimpleBlock("crystal_coal_ore",
             p -> p.strength(3).requiresCorrectToolForDrops()));
         items.registerSimpleBlockItem(blocks.registerSimpleBlock("crystal_grass",

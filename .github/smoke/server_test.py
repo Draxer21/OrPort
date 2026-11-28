@@ -73,16 +73,24 @@ def main():
     time.sleep(1)
 
     # 1. Invocación y estadísticas
-    for mob, name in (("scorpion", "Scorpion"), ("emperor_scorpion", "Emperor")):
+    for mob, name in (("scorpion", "Scorpion"), ("emperor_scorpion", "Emperor"), ("dungeon_beast", "Dungeon Beast")):
         reply = rc.cmd(f"summon orespawn:{mob} 0 {Y} {0 if mob == 'scorpion' else 20} {{NoAI:1b,Tags:[\"stat\"]}}")
         check(f"/summon orespawn:{mob}", "Summoned" in reply, reply)
-    expected = {"scorpion": (15, 4, 10), "emperor_scorpion": (350, 35, 20)}
+    expected = {"scorpion": (15, 4, 10), "emperor_scorpion": (350, 35, 20), "dungeon_beast": (65, 12, 6)}
     for mob, (hp, atk, arm) in expected.items():
         sel = f"@e[type=orespawn:{mob},tag=stat,limit=1]"
         got = [number(rc.cmd(f"attribute {sel} minecraft:{a} get")) for a in ("max_health", "attack_damage", "armor")]
         check(f"estadísticas de {mob} (vida, ataque, armadura)", got == [hp, atk, arm], f"{got} esperado {[hp, atk, arm]}")
     rc.cmd("kill @e[tag=stat]")
     time.sleep(2)
+    rc.cmd("kill @e[type=item]")
+
+    for i in range(64):
+        rc.cmd(f"summon orespawn:dungeon_beast {8+i%16} {Y} {8+i//16} {{NoAI:1b}}")
+    rc.cmd("kill @e[type=orespawn:dungeon_beast]")
+    time.sleep(2)
+    for drop in ("orespawn:pink_tourmaline", "orespawn:crystal_apple", "minecraft:oak_log"):
+        check(f"botín de Dungeon Beast: {drop}", count(rc, f'@e[type=item,nbt={{Item:{{id:"{drop}"}}}}]') > 0)
     rc.cmd("kill @e[type=item]")
 
     # Botín de la vaca de cristal, con tiradas independientes para ambas manzanas.
@@ -269,6 +277,17 @@ def main():
         if "passed" in rc.cmd(f"{crystal} if loaded 143 64 143"):
             break
         time.sleep(1)
+    edge = " ".join(f"if block {x} {y} 40 minecraft:air" for x in (47, 48) for y in (25, 26, 27))
+    check("pasillo natural entre chunks de Cristal", "passed" in rc.cmd(f"{crystal} {edge}"))
+    # Contar en una copia aislada para conservar intacto el laberinto del cliente.
+    rc.cmd(f"{crystal} run clone 32 24 32 47 28 47 32 180 32 replace")
+    for y, expected_count in ((180, 1), (184, 4)):
+        result = rc.cmd(f"{crystal} run fill 32 {y} 32 47 {y} 47 minecraft:glass replace orespawn:crystal_stone")
+        check(f"accesos rompibles en capa {y-156}", bool(re.search(rf"\b{expected_count}\b", result)), result)
+    walls = rc.cmd(f"{crystal} run fill 32 181 32 47 181 47 minecraft:glass replace minecraft:bedrock")
+    check("paredes interiores de roca madre", re.search(r"\b[1-9]\d*\b", walls) is not None, walls)
+    rc.cmd(f"{crystal} run fill 32 180 32 47 184 47 minecraft:air")
+
     def mark_sample(x, z):
         surface = f"{crystal} positioned {x + 0.5} 80 {z + 0.5} positioned over world_surface"
         if "passed" not in rc.cmd(f"{surface} if block ~ ~-1 ~ orespawn:crystal_grass if block ~ ~-2 ~ orespawn:crystal_stone"):

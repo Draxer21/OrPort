@@ -305,5 +305,12 @@
   "item.orespawn.crystal_apple": "Manzana de cristal",
   "item.orespawn.crystal_cow_egg": "Huevo de vaca de cristal",
   "item.orespawn.crystal_cow_cage": "Vaca de cristal enjaulada",
-  "block.orespawn.crystal_cow_ore": "Huevo fósil de vaca de cristal"
+  "block.orespawn.crystal_cow_ore": "Huevo fósil de vaca de cristal",
+  "entity.orespawn.dungeon_beast": "Bestia del laberinto",
+  "item.orespawn.dungeon_beast_egg": "Huevo de bestia del laberinto",
+  "block.orespawn.dungeon_beast_ore": "Huevo fósil de bestia del laberinto",
+  "item.orespawn.dungeon_beast_cage": "Bestia del laberinto enjaulada",
+  "item.orespawn.pink_tourmaline": "Lingote de turmalina rosa",
+  "subtitles.orespawn.entity.dungeon_beast.hurt": "Bestia del laberinto herida",
+  "subtitles.orespawn.entity.dungeon_beast.death": "Muere la bestia del laberinto"
 }

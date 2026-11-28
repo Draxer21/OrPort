@@ -17,7 +17,7 @@ public final class CritterCage extends Item {
     static final Map<String, DeferredItem<CritterCage>> CAGES = new HashMap<>();
     static DeferredItem<CritterCage> empty;
     final String species;
-    static final Map<String,Float> CAPTURE_CHANCE = Map.ofEntries(Map.entry("alosaurus_cage", 0.4f), Map.entry("trex_cage", 0.4f), Map.entry("cow_cage", 0.4f), Map.entry("creeper_cage", 0.4f), Map.entry("ghast_cage", 0.4f), Map.entry("horse_cage", 0.4f), Map.entry("pig_cage", 0.4f), Map.entry("zombie_cage", 0.4f), Map.entry("gammametroid_cage", 0.4f), Map.entry("spyro_cage", 0.4f), Map.entry("dragonfly_cage", 0.4f), Map.entry("firefly_cage", 0.4f), Map.entry("nastysaurus_cage", 0.4f), Map.entry("alien_cage", 0.4f), Map.entry("velocityraptor_cage", 0.4f), Map.entry("smallworm_cage", 0.4f), Map.entry("mediumworm_cage", 0.4f), Map.entry("largeworm_cage", 0.4f), Map.entry("kyuubi_cage", 0.4f), Map.entry("scorpion_cage", 0.4f), Map.entry("emperor_scorpion_cage", 0.4f), Map.entry("mantis_cage", 0.4f), Map.entry("mothra_cage", 0.4f), Map.entry("brutalfly_cage", 0.4f), Map.entry("beaver_cage", 0.4f), Map.entry("crystal_cow_cage", 0.4f), Map.entry("redcow_cage", 0.4f), Map.entry("stinkbug_cage", 0.4f), Map.entry("cassowary_cage", 0.4f));
+    static final Map<String,Float> CAPTURE_CHANCE = Map.ofEntries(Map.entry("alosaurus_cage", 0.4f), Map.entry("trex_cage", 0.4f), Map.entry("cow_cage", 0.4f), Map.entry("creeper_cage", 0.4f), Map.entry("ghast_cage", 0.4f), Map.entry("horse_cage", 0.4f), Map.entry("pig_cage", 0.4f), Map.entry("zombie_cage", 0.4f), Map.entry("gammametroid_cage", 0.4f), Map.entry("spyro_cage", 0.4f), Map.entry("dragonfly_cage", 0.4f), Map.entry("firefly_cage", 0.4f), Map.entry("nastysaurus_cage", 0.4f), Map.entry("alien_cage", 0.4f), Map.entry("velocityraptor_cage", 0.4f), Map.entry("smallworm_cage", 0.4f), Map.entry("mediumworm_cage", 0.4f), Map.entry("largeworm_cage", 0.4f), Map.entry("kyuubi_cage", 0.4f), Map.entry("scorpion_cage", 0.4f), Map.entry("emperor_scorpion_cage", 0.4f), Map.entry("mantis_cage", 0.4f), Map.entry("mothra_cage", 0.4f), Map.entry("brutalfly_cage", 0.4f), Map.entry("beaver_cage", 0.4f), Map.entry("dungeon_beast_cage", 0.4f), Map.entry("crystal_cow_cage", 0.4f), Map.entry("redcow_cage", 0.4f), Map.entry("stinkbug_cage", 0.4f), Map.entry("cassowary_cage", 0.4f));
     private CritterCage(Properties properties, String species) { super(properties); this.species = species; }
 
     static void register() {
@@ -47,6 +47,7 @@ public final class CritterCage extends Item {
         add("mothra_cage", "orespawn:mothra");
         add("brutalfly_cage", "orespawn:brutalfly");
         add("beaver_cage", "orespawn:beaver");
+        add("dungeon_beast_cage", "orespawn:dungeon_beast");
         add("crystal_cow_cage", "orespawn:crystal_cow");
         add("redcow_cage", "orespawn:redcow");
         add("stinkbug_cage", "orespawn:stinkbug");

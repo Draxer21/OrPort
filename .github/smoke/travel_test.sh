@@ -190,6 +190,26 @@ if [ $joined = 1 ]; then
   comando "/execute in orespawn:danger run tp @s 40 -50 -40 0 10"
   sleep 12
   import -window root "shots/danger_paisaje.png"
+  # Mundo nuevo en esta zona. La bestia debe aparecer por sí sola, sin huevo ni /summon.
+  comando "/difficulty normal"
+  comando "/gamerule minecraft:spawn_mobs true"
+  comando "/execute in orespawn:crystal run tp @s 512.5 25 512.5"
+  comando "/effect give @s minecraft:resistance 300 4 true"
+  comando "/effect give @s minecraft:night_vision 300 0 true"
+  comando "/gamemode survival"
+  bestias=0
+  for intento in $(seq 1 12); do
+    bestias=$(cuenta '@e[type=orespawn:dungeon_beast,distance=..128]')
+    [ "$bestias" -gt 0 ] && break
+    sleep 4
+  done
+  check "Dungeon Beast nace en el laberinto de Cristal" "$([ "$bestias" -gt 0 ] && echo 1 || echo 0)" "bestias=$bestias"
+  if [ "$bestias" -gt 0 ]; then
+    comando "/gamemode spectator"
+    comando "/spectate @e[type=orespawn:dungeon_beast,sort=nearest,limit=1]"
+    sleep 2
+    import -window root "shots/laberinto_llegada.png"
+  fi
 else
   echo "[FALLO] el cliente no entró al mundo"; fallos=1
 fi
