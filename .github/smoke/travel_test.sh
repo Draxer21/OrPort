@@ -58,7 +58,9 @@ clic_hormiga() {
   local sel="@e[type=orespawn:$ant,tag=$tag,limit=1]"
   comando "/tag $cerca add $tag"
   comando "/clear @s"
-  comando "/data merge entity $sel {NoAI:1b,NoGravity:1b,Motion:[0d,0d,0d]}"
+  # El jugador y la hormiga se trasladan en ticks distintos. Conservar el ejemplar
+  # natural al separarlos más de 128 bloques durante la preparación de la cámara.
+  comando "/data merge entity $sel {PersistenceRequired:1b,NoAI:1b,NoGravity:1b,Motion:[0d,0d,0d]}"
   # Mantener la cámara fuera del alcance de los escorpiones de la escena inferior.
   comando "/forceload add 80 80"
   comando "/fill 80 209 80 86 209 86 minecraft:stone"
@@ -173,6 +175,7 @@ if [ $joined = 1 ]; then
   sleep 20
   source .github/smoke/crystal_travel.sh
   probar_cristal
+  probar_vacas_cristal
   probar_mariposa
   antes=$(cuenta "@e[type=orespawn:rainbow_ant]"); antes2=$(cuenta "@e[type=orespawn:unstable_ant]")
   # El servidor ya comprobó que no quedó ninguna hormiga preparada; las que haya aquí salieron de los

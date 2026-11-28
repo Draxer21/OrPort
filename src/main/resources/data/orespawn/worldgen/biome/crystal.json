@@ -16,7 +16,8 @@
     [],
     [
       "orespawn:crystal_coal",
-      "orespawn:crystal_tigerseye"
+      "orespawn:crystal_tigerseye",
+      "orespawn:crystal_cow_ore"
     ],
     [],
     [],
@@ -36,6 +37,12 @@
         "type": "orespawn:termite",
         "weight": 8,
         "minCount": 2,
+        "maxCount": 4
+      },
+      {
+        "type": "orespawn:crystal_cow",
+        "weight": 1,
+        "minCount": 1,
         "maxCount": 4
       }
     ],

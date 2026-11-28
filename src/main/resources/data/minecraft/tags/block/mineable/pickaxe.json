@@ -47,6 +47,7 @@
     "orespawn:tigerseye_ore",
     "orespawn:tigerseye_block",
     "orespawn:crystal_stone",
-    "orespawn:crystal_coal_ore"
+    "orespawn:crystal_coal_ore",
+    "orespawn:crystal_cow_ore"
   ]
 }

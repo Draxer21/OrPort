@@ -300,5 +300,10 @@
   "block.orespawn.crystal_coal_ore": "Mena de carbón de cristal",
   "block.orespawn.termite_nest": "Termitero",
   "biome.orespawn.crystal": "Dimensión de Cristal",
-  "message.orespawn.termite.empty_inventory": "Vacía el inventario, incluida la armadura y la mano secundaria, antes de entrar en la dimensión de Cristal."
+  "message.orespawn.termite.empty_inventory": "Vacía el inventario, incluida la armadura y la mano secundaria, antes de entrar en la dimensión de Cristal.",
+  "entity.orespawn.crystal_cow": "Vaca de cristal",
+  "item.orespawn.crystal_apple": "Manzana de cristal",
+  "item.orespawn.crystal_cow_egg": "Huevo de vaca de cristal",
+  "item.orespawn.crystal_cow_cage": "Vaca de cristal enjaulada",
+  "block.orespawn.crystal_cow_ore": "Huevo fósil de vaca de cristal"
 }

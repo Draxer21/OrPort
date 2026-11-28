@@ -50,6 +50,7 @@ public final class ClientModels {
         bind(event,"beaver",Shapes::ModelBeaver, root -> new BeaverPose(root,1.0F,1f),1f);
         bind(event,"cassowary",Shapes::ModelCassowary, root -> new CassowaryPose(root,1.0F,1f),1f);
         bind(event,"termite",Shapes::ModelAnt, root -> new AntModel(root),0.4f);
+        bind(event,"crystal_cow",Shapes::ModelCow, root -> new CowPose(root),1f);
         bind(event,"redcow",Shapes::ModelCow, root -> new CowPose(root),1f);
         bind(event,"stinkbug",Shapes::ModelStinkBug, root -> new StinkBugPose(root,0.1F,1f),1f);
         bind(event,"doom_worm",Shapes::ModelWormDoom, root -> new DoomPose(root),2f);
@@ -92,6 +93,7 @@ public final class ClientModels {
             case "beaver" -> new String[]{"beaver.png"};
             case "cassowary" -> new String[]{"cassowary.png"};
             case "termite" -> new String[]{"termite.png"};
+            case "crystal_cow" -> new String[]{"crystal_cow.png"};
             case "redcow" -> new String[]{"red_cow.png"};
             case "stinkbug" -> new String[]{"stinkbug.png"};
             case "doom_worm" -> new String[]{"wormdoomtexture.png"};
@@ -125,6 +127,7 @@ public final class ClientModels {
                 }
             }
             state.scale*=modelScale;
+            if (mob instanceof CrystalCow && mob.isBaby()) state.scale *= state.ageScale;
         }
         @Override public LivingEntityRenderState createRenderState(){return new CreatureFrame();}
         @Override protected int getBlockLightLevel(Creatures.Creature mob,net.minecraft.core.BlockPos pos){
